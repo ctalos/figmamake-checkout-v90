@@ -1,0 +1,3206 @@
+/* ============================================================
+   checkout.module.scss — full SCSS module for CheckoutPage
+   ============================================================ */
+
+/* ── Page shell ── */
+.page {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+/* ── Header ── */
+.header {
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+}
+
+.headerAccent {
+  border-bottom: 3px solid #0f218b;
+  border-top: 2px solid #0f218b;
+}
+
+.headerInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.headerLogo {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #0f218b;
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.25rem;
+  font-size: 13px;
+}
+
+.breadcrumbLink {
+  color: #004bb1;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.breadcrumbSep {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  color: #999;
+}
+
+.breadcrumbCurrent {
+  color: #666;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+}
+
+/* ── Checkout title row ── */
+.checkoutTitleRow {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.checkoutTitleInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.checkoutTitle {
+  font-size: 24px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+}
+
+/* ── Progress stepper ── */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-bottom: 0.5rem;
+}
+
+.stepperStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stepperDot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.stepperDotActive {
+  background-color: #1f69c6;
+  border: 2px solid #1f69c6;
+}
+
+.stepperDotInactive {
+  background-color: #949494;
+  border: 2px solid #949494;
+}
+
+.stepperLabel {
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+}
+
+.stepperLabelInactive {
+  color: #767676;
+}
+
+.stepperLine {
+  width: 5rem;
+  height: 2px;
+  margin-bottom: 1rem;
+}
+
+.stepperLineActive {
+  background-color: #1f69c6;
+}
+
+.stepperLineInactive {
+  background-color: #cdcdcd;
+}
+
+/* ── Main content area ── */
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.panels {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+/* ── Panel ── */
+.panel {
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* ── Panel Header ── */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  width: 100%;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.panelHeaderOpen {
+  background-color: #dce8f6;
+  cursor: default;
+}
+
+.panelHeaderCompleted {
+  background-color: #f2f2f2;
+  cursor: default;
+  &:hover { background-color: #e8e8e8; }
+}
+
+.panelHeaderPending {
+  background-color: #ebf1f9;
+  cursor: pointer;
+  &:hover { background-color: #d8e8f5; }
+}
+
+.panelHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.panelStepLabel {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+}
+
+.panelTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+}
+
+.panelSummarySep {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+.panelSummaryText {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #475569;
+}
+
+.panelSummaryTextPre {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #475569;
+  white-space: pre;
+}
+
+.checkIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.editBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #0062bd;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+}
+
+.editBtnIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ── Panel 1 content ── */
+.panel1Content {
+  padding: 1.25rem;
+  background-color: #ffffff;
+  border-top: 1px solid #bfbfbf;
+}
+
+.selectedAddrSection {
+  margin-bottom: 1rem;
+}
+
+.selectedAddrHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.selectedAddrLabel {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #666;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.addrCard {
+  border: 2px solid #0062bd;
+  border-radius: 4px;
+  background-color: rgba(242, 248, 253, 0.5);
+  padding: 1rem;
+  display: flex;
+  flex-flow: column;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.addrCardRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.addrCardName {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #333;
+}
+
+.addrCardLine {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #555;
+  margin-top: 0.125rem;
+}
+
+.addrCardPhone {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  margin-top:6px;
+  color: #555;
+}
+
+.addrCardPhoneLabel {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+}
+
+.addrCardMeta {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #555;
+}
+
+.addrCardMetaBold {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+}
+
+.addrCardFieldRow {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.addrCardFieldRowMargin {
+  margin-top: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.addrCardFieldLabel {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.addrCardInput {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 12px;
+  width: 11rem;
+  color: #333;
+  outline: none;
+  &:focus { border-color: #0062bd; }
+}
+
+.addrCardActions {
+  align-self: flex-start;
+  margin-left: auto;
+}
+
+.selectNewAddrBtn {
+  border: none;
+  color: #0062bd;
+  font-size: 13px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  &:hover { text-decoration: underline; }
+}
+
+.panel1Footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.backBtn {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 13px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #374151;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  &:hover { background-color: #f9fafb; }
+}
+
+.nextBtn {
+  background-color: #0062bd;
+  color: #ffffff;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 4px;
+  border: none;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  &:hover { background-color: #0055a0; }
+}
+
+/* ── Panel 2 content ── */
+.panel2Content {
+  padding: 1.25rem;
+  background-color: #ffffff;
+  border-top: 1px solid #bfbfbf;
+}
+
+.shippingOptionsBox {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: rgba(248, 250, 252, 0.8);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.shippingOptionsInner {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+.fulfillmentCol {
+  width: 425px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionNumberRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sectionNumber {
+  background-color: #0f0f0f;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  border-radius: 4px;
+}
+
+.sectionTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1e293b;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.fulfillmentCards {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction:column;
+}
+
+.fulfillmentCard {
+  flex: 1 1 0%;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 18px 18px 8px 18px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  background-color: #ffffff;
+}
+
+.fulfillmentCardActive {
+  border: 2px solid #0062bd;
+}
+
+.fulfillmentCardInactive {
+  border: 1px solid #d1d5db;
+}
+
+.fulfillmentCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.fulfillmentCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.radioCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #6b7280;
+  flex-shrink: 0;
+}
+
+.radioCircleActive {
+  border-color: #0062bd;
+}
+
+.radioDot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background-color: #0062bd;
+}
+
+.fulfillmentCardLabel {
+  font-size: 14px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #1e293b;
+}
+
+.fulfillmentCardLabelActive {
+  color: #0062bd;
+}
+
+.badgeSaveTime {
+  background-color: #dbeafe;
+  color: #0062bd;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  border-radius: 4px;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.badgeSaveMoney {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  border-radius: 4px;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.fulfillmentCardDesc {
+  color: #475569;
+  font-size: 12px;
+  font-style: normal;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.shippingMethodCol {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-self: stretch;
+}
+
+.shippingMethodBox {
+  background-color: #f7f9fb;
+  border-radius: 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 0%;
+}
+
+/* Toggle pill */
+.shippingToggle {
+  display: flex;
+  align-items: center;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  padding: 6px;
+  gap: 8px;
+  height: 42px;
+}
+
+.shippingToggleBtn {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: none;
+  border-radius: 4px;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  text-align: center;
+  padding: 6px 8px;
+  transition: background-color 0.15s ease;
+}
+
+.shippingToggleBtnActive {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Saved carrier account pill */
+.carrierPill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 9px 11px;
+  height: 42px;
+}
+
+.carrierBadgeFedEx {
+  background-color: #4d148c;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: "Roboto:Medium", sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: -0.55px;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+
+.carrierBadgeUps {
+  background-color: #4e3629;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: #ffb500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+
+.carrierPillAcct {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  margin-left: 10px;
+}
+
+.carrierPillLabel {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #334155;
+}
+
+.carrierPillNumber {
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.carrierEditBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.carrierEditLabel {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Add / edit carrier account CTA row */
+.carrierFormTitle {
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding-left:0.1rem;
+  margin: 0;
+}
+
+.carrierAccountInput {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 13px;
+  height: 42px;
+  font-size: 14px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #1e293b;
+  width: 100%;
+  outline: none;
+
+  &:focus {
+    border-color: #004bb1;
+    box-shadow: 0 0 0 1px #004bb1;
+  }
+}
+
+.carrierCtaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.carrierCtaCancel {
+  flex: 1 0 0;
+  height: 42px;
+  background-color: rgba(15,15,15, 0.05);
+  border: none;
+  border-radius: 4px;
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #004bb1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(15,15,15, 0.12);
+  }
+}
+
+.carrierCtaSave {
+  flex: 1 0 26px;
+  height: 42px;
+  background-color: #0169c6;
+  border: 1px solid #004bb1;
+  border-radius: 4px;
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background-color: #0055a0;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.shippingSelect {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 13px;
+  height: 42px;
+  font-size: 14px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #1e293b;
+  width: 100%;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.accountRow {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 4px;
+}
+
+.accountLabel {
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.accountNumber {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #004bb1;
+}
+
+.accountAddBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px dashed #004bb1;
+  border-radius: 3px;
+  padding: 2px 8px;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 75, 177, 0.04);
+  }
+}
+
+.accountAddIcon {
+  width: 9.5px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.accountAddText {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #004bb1;
+  white-space: nowrap;
+}
+
+.accountInput {
+  background-color: #ffffff;
+  border: 1px solid #004bb1;
+  border-radius: 4px;
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 12px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #004bb1;
+  width: 80px;
+  outline: none;
+}
+
+.accountEditBtn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.accountEditIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.panel2Footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+}
+
+/* ── PackageTable ── */
+.packageTableWrap {
+  margin-bottom: 1.25rem;
+}
+
+.packageTableHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.packageLabel {
+  background-color: #0062bd;
+  color: #ffffff;
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  border-radius: 4px;
+}
+
+.packageMetaText {
+  color: #374151;
+  font-size: 13px;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.packageMetaSep {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.packageTable {
+  border: 1px solid #bfbfbf;
+}
+
+.packageTableHeadRow {
+  background-color: #ebf1f9;
+  display: grid;
+  grid-template-columns: 2fr 90px 80px 110px 1fr 50px;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.packageTableHeadCell {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-right: 1px solid #bfbfbf;
+  white-space: pre-line;
+}
+
+.packageTableHeadCellLast {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.packageTableRow {
+  display: grid;
+  grid-template-columns: 2fr 90px 80px 110px 1fr 50px;
+  border-bottom: 1px solid #bfbfbf;
+  &:last-child { border-bottom: none; }
+}
+
+.packageTableCellProduct {
+  border-right: 1px solid #bfbfbf;
+  padding: 0.625rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.productThumb {
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.productThumbPlaceholder {
+  width: 75px;
+  height: 75px;
+  background-color: #f3f4f6;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.productAliasInput {
+  border: 1px solid #bfbfbf;
+  border-radius: 4px;
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 12px;
+  color: #757575;
+  width: 100%;
+}
+
+.productPartNum {
+  font-size: 12px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #333;
+}
+
+.productName {
+  font-size: 12px;
+  color: #004bb1;
+  font-family: "Roboto:Regular", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.productDesc {
+  font-size: 12px;
+  color: #333;
+  font-family: "Roboto:Regular", sans-serif;
+  width: 178px;
+}
+
+.productBrand {
+  font-size: 12px;
+  color: #333;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.stockBadge {
+  display: inline-block;
+  background-color: #fff2bf;
+  border: 1px solid #666;
+  font-size: 10px;
+  color: #333;
+  border-radius: 4px;
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: fit-content;
+}
+
+.packageTableCellPrice {
+  border-right: 1px solid #bfbfbf;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  text-align: right;
+  font-size: 16px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #333;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.packageTableCellQty {
+  border-right: 1px solid #bfbfbf;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  text-align: right;
+  font-size: 16px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.packageTableCellSubtotal {
+  border-right: 1px solid #bfbfbf;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  text-align: right;
+  font-size: 16px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #333;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.packageTableCellShipping {
+  border-right: 1px solid #bfbfbf;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.shippingLocation {
+  font-size: 12px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #333;
+  text-align: right;
+}
+
+.shippingDate {
+  font-size: 14px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+}
+
+.changeDateRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.changeDateText {
+  font-size: 12px;
+  color: #333;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.calendarBtn {
+  width: 2rem;
+  height: 2rem;
+  background-color: #f2f2f2;
+  border: 1px solid #bfbfbf;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+}
+
+.packageTableCellDelete {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.deleteBtn {
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #004bb1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+}
+
+.packageTableNote {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.375rem;
+  padding-left: 0.25rem;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #474747;
+  color: #ffffff;
+  font-size: 10px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.noteText {
+  font-size: 11px;
+  color: #475569;
+  font-family: "Roboto:Italic", sans-serif;
+  font-style: italic;
+}
+
+/* ── Panel 3 content ── */
+.panel3Content {
+  background-color: #ffffff;
+  border-top: 1px solid #bfbfbf;
+}
+
+.panel3Body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.paymentCard {
+  position: relative;
+  border-radius: 8px;
+  width: 100%;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.05));
+}
+
+.paymentCardActive {
+  background-color: #ffffff;
+  border: 2px solid #00529b;
+}
+
+.paymentCardInactive {
+  background-color: rgba(249, 250, 251, 0.5);
+  border: 1px solid #d1d5db;
+}
+
+.paymentCardInner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 26px;
+}
+
+.paymentCardInnerCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 22px;
+}
+
+.paymentRadioRow {
+  position: relative;
+  width: 100%;
+}
+
+.paymentRadioRowBordered {
+  position: relative;
+  width: 100%;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.paymentRadioBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.paymentRadioCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.paymentRadioCircleActive {
+  border-color: #00529b;
+  background-color: #00529b;
+}
+
+.paymentRadioDot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+.paymentOptionTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #111827;
+}
+
+.paymentCardTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.paymentCardTitleCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 0;
+}
+
+.paymentCardTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #374151;
+}
+
+.paymentCardSubtitle {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* ── PO input section ── */
+.poSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.poLabel {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #374151;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.poRequired {
+  color: #ef4444;
+}
+
+.poInputWrap {
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+}
+
+.poInput {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 14px;
+  font-family: "Liberation Mono", monospace;
+  color: #111827;
+  width: 100%;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  outline: none;
+  &:focus {
+    border-color: #00529b;
+    box-shadow: 0 0 0 1px #00529b;
+  }
+}
+
+.inputCheckIcon {
+  position: absolute;
+  right: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ── Card badges ── */
+.cardBadges {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.badgeVisa {
+  background-color: #0a2540;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.badgeMastercard {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.05));
+}
+
+.mastercardCircles {
+  position: relative;
+  flex-shrink: 0;
+  width: 14px;
+  height: 10px;
+}
+
+.mastercardRed {
+  position: absolute;
+  background-color: #eb001b;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  left: 0;
+  top: 0;
+}
+
+.mastercardYellow {
+  position: absolute;
+  background-color: #f79e1b;
+  opacity: 0.9;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  left: 4px;
+  top: 0;
+}
+
+.mastercardText {
+  color: #1f2937;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+}
+
+.badgeAmex {
+  background-color: #006fcf;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.05));
+}
+
+/* ── Credit card form ── */
+.cardPoRefRow {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cardPoRefLabel {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #374151;
+}
+
+.cardPoRefValue {
+  position: relative;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  padding-left: 0.75rem;
+  padding-right: 0.375rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  width: 192px;
+}
+
+.cardPoRefText {
+  font-family: "Liberation Mono", monospace;
+  font-size: 12px;
+  color: #374151;
+}
+
+.cardFormWrap {
+  background-color: #ffffff;
+  border-radius: 4px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cardFormHeader {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardFormTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #111827;
+  letter-spacing: -0.5px;
+}
+
+.cardFormDivider {
+  border-top: 1px solid #9ca3af;
+  width: 100%;
+}
+
+.cardFormSubtitle {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #374151;
+}
+
+.cardFormRequired {
+  color: #ea580c;
+  font-family: "Roboto:Bold", sans-serif;
+}
+
+.cardFormTable {
+  border: 1px solid #d1d5db;
+  width: 100%;
+}
+
+.cardFormRow {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid #e5e7eb;
+  &:last-child { border-bottom: none; }
+}
+
+.cardFormLabel {
+  background-color: #f3f4f6;
+  border-right: 1px solid #e5e7eb;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  width: 150px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.cardFormLabelText {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #374151;
+}
+
+.cardFormLabelRequired {
+  color: #ea580c;
+}
+
+.cardFormValue {
+  flex: 1 1 0%;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.cardFormValueText {
+  font-family: "Roboto:SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.cardFormValueBordered {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: 303px;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.cardFormValueWide {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: 375px;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+}
+
+.cardFormValueWide376 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: 376px;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+}
+
+.cardInput {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-family: "Liberation Mono", monospace;
+  font-size: 14px;
+  color: #1f2937;
+  width: 100%;
+  outline: none;
+  padding-right: 2rem;
+  &:focus {
+    border-color: #00529b;
+    box-shadow: 0 0 0 1px #00529b;
+  }
+}
+
+.cardInputRelative {
+  position: relative;
+  width: 288px;
+}
+
+.cardInputIcon {
+  position: absolute;
+  right: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+}
+
+.expiryDropdown {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.375rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.expiryDropdownText {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.expirySlash {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.expiryHint {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #6b7280;
+  padding-left: 0.25rem;
+}
+
+.cardChevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.nameOnCardDisplay {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  width: 100%;
+}
+
+.nameOnCardText {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.cvvDisplay {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  width: 80px;
+}
+
+.cvvText {
+  font-family: "Liberation Mono", monospace;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.cvvHint {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.countryDropdown {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.375rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 350px;
+}
+
+.countryText {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.zipDisplay {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  width: 100%;
+}
+
+.addressDisplay {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  width: 100%;
+}
+
+.stateDropdown {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.375rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.fieldText {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.panel3Footer {
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+/* ── Order Sidebar ── */
+.sidebar {
+  width: 228px;
+  flex-shrink: 0;
+}
+
+.sidebarBox {
+  background-color: #f2f2f2;
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.sidebarShippingRow {
+  border-bottom: 1px solid #bfbfbf;
+  padding-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.sidebarShippingText {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #333;
+}
+
+.sidebarTotalRow {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #bfbfbf;
+  border-bottom-style: dashed;
+  width: 100%;
+  text-align: center;
+}
+
+.sidebarTotal {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #000000;
+}
+
+.sidebarLineItems {
+  width: 100%;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+}
+
+.sidebarLineItem {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #bfbfbf;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sidebarLineItemLast {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sidebarLineLabel {
+  color: #333;
+}
+
+.sidebarLineValue {
+  color: #000000;
+}
+
+.sidebarLineShipping {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #bfbfbf;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sidebarShippingLabel {
+  div:first-child { color: #333; }
+  div:last-child {
+    font-family: "Roboto:Regular", sans-serif;
+    font-weight: 400;
+    color: #333;
+  }
+}
+
+.sidebarShippingValue {
+  text-align: right;
+  div:first-child { color: #000000; }
+  div:last-child {
+    font-family: "Roboto:Regular", sans-serif;
+    font-weight: 400;
+    color: #333;
+  }
+}
+
+.promoRow {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 35px;
+  margin-bottom: 8px;
+}
+
+.promoInput {
+  flex: 1 1 0%;
+  border: 1px solid #bfbfbf;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.promoInputText {
+  position: absolute;
+  left: 5.333px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13.333px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #757575;
+}
+
+.promoApplyBtn {
+  background-color: #f2f2f2;
+  border: 1px solid #bfbfbf;
+  width: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover { background-color: #e5e5e5; }
+}
+
+.promoApplyText {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #333;
+}
+
+.sidebarButtons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.submitBtn {
+  width: 100%;
+  border-radius: 4px;
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.submitBtnEnabled {
+  background-color: #cf4817;
+  color: #ffffff;
+  cursor: pointer;
+  &:hover { background-color: #b83d13; }
+}
+
+.submitBtnDisabled {
+  background-color: #9ca3af;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.backToCartBtn {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  cursor: pointer;
+  &:hover { background-color: #f9fafb; }
+}
+
+.sidebarDivider {
+  border-top: 1px dashed #bfbfbf;
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 11px;
+}
+
+.sidebarNote {
+  background-color: #ffffff;
+  border: 1px solid #bfbfbf;
+  padding: 8px;
+  width: 100%;
+  font-size: 12px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #333;
+  line-height: 22.4px;
+}
+
+.sidebarNoteLink {
+  color: #004bb1;
+  text-decoration: underline;
+}
+
+/* ── Footer ── */
+.footer {
+  border-top: 1px solid #d1d5db;
+  background-color: #ffffff;
+  margin-top: 1rem;
+}
+
+.footerInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footerCopy {
+  font-size: 12px;
+  color: #555;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.footerLink {
+  font-size: 12px;
+  color: #004bb1;
+  font-family: "Roboto:Regular", sans-serif;
+  &:hover { text-decoration: underline; }
+}
+
+/* ── Modal overlays ── */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  overflow: auto;
+  padding: 1rem;
+}
+
+.modalBox {
+  background-color: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
+  width: 100%;
+  border: 1px solid #d1d5db;
+}
+
+.modalBoxSmall {
+  max-width: 600px;
+}
+
+.modalBoxLarge {
+  max-width: 900px;
+}
+
+.modalHeader {
+  background-color: #edf2f7;
+  border-bottom: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.modalTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #111827;
+}
+
+.modalCloseBtn {
+  color: #6b7280;
+  font-size: 20px;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  &:hover { color: #374151; }
+}
+
+.modalBody {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.modalFooter {
+  background-color: #f9fafb;
+  border-top: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.modalCancelBtn {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #374151;
+  background: none;
+  cursor: pointer;
+  &:hover { background-color: #f9fafb; }
+}
+
+.modalSaveBtn {
+  background-color: #0066c0;
+  color: #ffffff;
+  border-radius: 4px;
+  border: none;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  &:hover { background-color: #0055a0; }
+}
+
+/* ── Change Address modal ── */
+.caModalBox {
+  width: 100%;
+  max-width: 500px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.caModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.caBody {
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+
+.caSection {
+  margin-bottom: 20px;
+}
+
+.caSectionTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #374151;
+  margin: 0 0 10px 0;
+}
+
+.caCurrentCard {
+  border: 2px solid #0062bd;
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(242, 248, 253, 0.5);
+}
+
+.caCurrentCardRadio {
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.caRadioFilled {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #0062bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caRadioFilledDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: white;
+}
+
+.caCurrentCardInfo {
+  flex: 1;
+}
+
+.caCurrentName {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #111827;
+}
+
+.caCurrentAddr {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #4b5563;
+  margin-top: 2px;
+}
+
+.caCurrentBadges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.caCurrentBadge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #16a34a;
+}
+
+.caEditLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #0062bd;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  &:hover { text-decoration: underline; }
+}
+
+.caCancelLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #0062bd;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  &:hover { text-decoration: underline; }
+}
+
+.caSavedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  .caSectionTitle { margin-bottom: 0; }
+}
+
+.caAddLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #0062bd;
+  white-space: nowrap;
+
+  &:hover { text-decoration: underline; }
+}
+
+.caSearchRow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 24px;
+}
+
+.caSearchWrap {
+  flex: 1;
+  position: relative;
+}
+
+.caSearchInput {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  padding: 8px 12px 8px 32px;
+  font-size: 13px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #374151;
+  outline: none;
+
+  &::placeholder { color: #9ca3af; }
+  &:focus { border-color: #0062bd; }
+}
+
+.caSearchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+}
+
+.caSearchBtn {
+  background-color: #474747;
+  border: 1px solid #474747;
+  border-radius: 0 4px 4px 0;
+  color: #ffffff;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0 14px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover { background-color: #333; }
+}
+
+.caSavedList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.caSavedItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #cfd7df;
+  border-radius: 4px;
+  padding: 10px 12px;
+  cursor: pointer;
+
+  &:hover { border-color: #9cc8ec; }
+}
+
+.caSavedItemSelected {
+  border-color: #9cc8ec;
+  background-color: #f2f8fd;
+}
+
+.caSavedRadio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caSavedRadioActive {
+  border: 2px solid #0062bd;
+  background: #0062bd;
+}
+
+.caSavedRadioDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.caSavedInfo {
+  flex: 1;
+}
+
+.caSavedNameRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.caSavedName {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #111827;
+}
+
+.caSavedPrimary {
+  background-color: #dbeafe;
+  color: #0062bd;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.caSavedAddr {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #4b5563;
+  margin-top: 2px;
+}
+
+.caUseAddrBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #0062bd;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* Back link / Add new heading */
+.caBackLink {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #0062bd;
+  margin-bottom: 16px;
+  padding: 0;
+
+  &:hover { text-decoration: underline; }
+}
+
+.caAddTitle {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+/* Address form (stacked) */
+.caForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.caField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.caFieldRow {
+  display: flex;
+  gap: 12px;
+}
+
+.caFieldHalf {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.caFieldInline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .caLabel {
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+}
+
+.caLabel {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #374151;
+}
+
+.caTaxableHelp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  font-size: 9px;
+  cursor: help;
+  margin-left: 4px;
+}
+
+.caInput {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #374151;
+  outline: none;
+
+  &::placeholder { color: #9ca3af; }
+  &:focus { border-color: #0062bd; box-shadow: 0 0 0 1px #0062bd; }
+}
+
+.caInputInline {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #374151;
+  outline: none;
+
+  &::placeholder { color: #9ca3af; }
+  &:focus { border-color: #0062bd; }
+}
+
+.caSelect {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: "Roboto:Regular", sans-serif;
+  color: #374151;
+  background: #fff;
+  outline: none;
+  appearance: auto;
+
+  &:focus { border-color: #0062bd; }
+}
+
+.caTaxableRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.caTaxableOption {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.caTaxableRadio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #9ca3af;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.caTaxableRadioActive {
+  border-color: #0062bd;
+}
+
+.caTaxableRadioDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0062bd;
+}
+
+.caPreferredRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.caCheckbox {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.caCheckboxLabel {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  color: #374151;
+}
+
+.caFormFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ── Modal form table ── */
+.modalFormTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.modalFormRow {
+  border: 1px solid #d1d5db;
+}
+
+.modalFormLabelCell {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #374151;
+  font-family: "Roboto:Regular", sans-serif;
+  width: 220px;
+  background-color: #ffffff;
+}
+
+.modalFormInputCell {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #ffffff;
+}
+
+.modalInput {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+}
+
+.modalInputGray {
+  color: #9ca3af;
+}
+
+.modalInputW200 {
+  width: 200px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+}
+
+.modalInputW140 {
+  width: 140px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+}
+
+.modalInputW220 {
+  width: 220px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+}
+
+.taxableRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.taxableLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.taxableRadioOuter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid #0062bd;
+}
+
+.taxableRadioInner {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #0062bd;
+}
+
+.taxableHelpIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1px solid #9ca3af;
+  color: #9ca3af;
+  font-size: 10px;
+  cursor: help;
+}
+
+.taxableLabelFlex {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ── Address form rows (used in select modal) ── */
+.addrFormTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+}
+
+.addrFormRow {
+  border-top: 1px solid #d1d5db;
+}
+
+.addrFormLabelCell {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #f3f4f6;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #1f2937;
+  width: 240px;
+}
+
+.addrFormInputCell {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  background-color: #ffffff;
+}
+
+.addrFormInput {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.addrFormSelect {
+  width: 200px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  color: #333;
+}
+
+.addrFormSelect240 {
+  width: 240px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  color: #333;
+}
+
+.addrFormInputW160 {
+  width: 160px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.addrFormInputW220 {
+  width: 220px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.addrFormTaxableRow {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.addrFormTaxableLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.addrFormRadioEmpty {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #6b7280;
+}
+
+.addrFormRadioSelected {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addrFormTaxableHelpIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: help;
+}
+
+/* ── Select Address Modal tabs / search ── */
+.selectModalTabs {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.25rem;
+  padding-bottom: 0;
+}
+
+.tabsRow {
+  display: flex;
+  gap: 3rem;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.tab {
+  position: relative;
+  padding-bottom: 0.5rem;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tabActive {
+  color: #374151;
+}
+
+.tabInactive {
+  color: #374151;
+  opacity: 0.5;
+  &:hover { opacity: 0.8; }
+}
+
+.tabUnderline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #0169C6;
+  border-radius: 2px;
+}
+
+.savedAddressBody {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.addrSearchRow {
+  display: flex;
+  align-items: stretch;
+  border-radius: 4px;
+}
+
+.addrSearchInputWrap {
+  position: relative;
+  flex: 1 1 0%;
+}
+
+.addrSearchInput {
+  width: 100%;
+  border-left: 1px solid #d1d5db;
+  border-top: 1px solid #d1d5db;
+  border-bottom: 1px solid #d1d5db;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  padding-left: 2.25rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.addrSearchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+}
+
+.addrSearchBtn {
+  background-color: #474747;
+  border: 1px solid #474747;
+  color: #ffffff;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
+}
+
+.addrSearchBtnIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.addrList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.addrItem {
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.875rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.addrItemSelected {
+  background-color: #f2f8fd;
+  border: 2px solid #9cc8ec;
+}
+
+.addrItemUnselected {
+  background-color: #ffffff;
+  border: 1px solid #cfd7df;
+}
+
+.addrItemRadioWrap {
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  position: relative;
+}
+
+.addrItemRadioSelected {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #0062bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -0.125rem;
+  margin-left: -0.125rem;
+}
+
+.addrItemRadioUnselected {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+.addrItemContent {
+  flex: 1 1 0%;
+}
+
+.addrItemNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addrItemName {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 14px;
+  color: #111827;
+}
+
+.addrItemPrimary {
+  background-color: #dbeafe;
+  color: #0062bd;
+  font-size: 11px;
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+  border-radius: 4px;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.addrItemAddr {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #4b5563;
+  margin-top: 0.125rem;
+}
+
+.addrItemAction {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.addrItemActionSelected {
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #004bb1;
+}
+
+.addrItemActionUnselected {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.newAddrBody {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}

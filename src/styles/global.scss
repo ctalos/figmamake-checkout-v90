@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Roboto:Regular";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://static.figma.com/font/Roboto_wdth_wght__3") format("woff2");
+}
+@font-face {
+  font-family: "Roboto:Bold";
+  font-style: normal;
+  font-weight: 700;
+  src: url("https://static.figma.com/font/Roboto_wdth_wght__3") format("woff2");
+}
+@font-face {
+  font-family: "Roboto:SemiBold";
+  font-style: normal;
+  font-weight: 600;
+  src: url("https://static.figma.com/font/Roboto_wdth_wght__3") format("woff2");
+}
+@font-face {
+  font-family: "Roboto:Medium";
+  font-style: normal;
+  font-weight: 500;
+  src: url("https://static.figma.com/font/Roboto_wdth_wght__3") format("woff2");
+}
+
+@font-face {
+  font-family: "Roboto:Italic";
+  font-style: italic;
+  font-weight: 400;
+  src: url("https://static.figma.com/font/Roboto-Italic_wdth_wght__3") format("woff2");
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-variation-settings: "wdth" 100;
+}

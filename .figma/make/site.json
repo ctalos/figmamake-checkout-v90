@@ -1,0 +1,10 @@
+{
+  "description": "Streamline your online shopping experience with an intuitive checkout page featuring an accordion design for easy address management and seamless navigation.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

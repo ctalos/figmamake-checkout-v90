@@ -629,8 +629,16 @@ function Panel1Content({
         <div className={s.selectedAddrHeader}>
           <span className={s.selectedAddrLabel}>Selected Address</span>
           <button onClick={onChangeAddress} className={s.selectNewAddrBtn}>
-            <span style={{ fontSize: "16px", lineHeight: "1" }}>+</span> Select
-            New Address
+            <svg className={s.selectNewAddrIcon} fill="none" viewBox="0 0 14 14">
+              <path
+                d="M7 2.33333V11.6667M11.6667 7H2.33333"
+                stroke="#0062BD"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.45833"
+              />
+            </svg>
+            Select New Address
           </button>
         </div>
         <div className={s.addrCard}>

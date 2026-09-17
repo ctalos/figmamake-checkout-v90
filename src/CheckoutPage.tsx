@@ -1,19 +1,19 @@
-import { useState } from "react"
-import svgPaths from "../imports/svg-otyv9vxe4n"
-import svgPathsAac from "../imports/svg-aacepbrbow"
-import svgPathsGol from "../imports/svg-gol9aevr63"
-import s from "./styles/checkout.module.scss"
+import { useState } from "react";
+import svgPaths from "../imports/svg-otyv9vxe4n";
+import svgPathsAac from "../imports/svg-aacepbrbow";
+import svgPathsGol from "../imports/svg-gol9aevr63";
+import s from "./styles/checkout.module.scss";
 
-type ModalType = "change" | null
+type ModalType = "change" | null;
 
 const CARRIER_METHODS = [
   "ups-collect",
   "ups-third-party",
   "fedex-bill-recipient",
   "fedex-third-party",
-]
+];
 
-type ChangeAddrView = "select" | "edit" | "add"
+type ChangeAddrView = "select" | "edit" | "add";
 
 function AddrForm({
   initialValues,
@@ -22,21 +22,21 @@ function AddrForm({
   onCancel,
 }: {
   initialValues?: {
-    company?: string
-    street?: string
-    city?: string
-    zip?: string
-    phone?: string
-  }
-  submitLabel: string
-  onSubmit: () => void
-  onCancel: () => void
+    company?: string;
+    street?: string;
+    city?: string;
+    zip?: string;
+    phone?: string;
+  };
+  submitLabel: string;
+  onSubmit: () => void;
+  onCancel: () => void;
 }) {
-  const [shippingMethod, setShippingMethod] = useState("")
-  const [country, setCountry] = useState("us")
-  const [taxable, setTaxable] = useState<"yes" | "no">("no")
-  const showCarrierAccount = CARRIER_METHODS.includes(shippingMethod)
-  const isCanada = country === "ca"
+  const [shippingMethod, setShippingMethod] = useState("");
+  const [country, setCountry] = useState("us");
+  const [taxable, setTaxable] = useState<"yes" | "no">("no");
+  const showCarrierAccount = CARRIER_METHODS.includes(shippingMethod);
+  const isCanada = country === "ca";
   return (
     <div className={s.caForm}>
       <div className={s.caField}>
@@ -149,9 +149,7 @@ function AddrForm({
         </>
       )}
       <div className={s.caFieldInline}>
-        <label className={s.caLabel}>
-          Are You Taxable? <span className={s.caTaxableHelp}>?</span>
-        </label>
+        <label className={s.caLabel}>Are You Taxable?</label>
         <div className={s.caTaxableRow}>
           <label className={s.caTaxableOption}>
             <div
@@ -179,11 +177,11 @@ function AddrForm({
           </label>
         </div>
       </div>
-      <div className={s.caFieldInline}>
+      <div className={s.caField}>
         <label className={s.caLabel}>Department</label>
         <input className={s.caInputInline} placeholder="(optional)" />
       </div>
-      <div className={s.caFieldInline}>
+      <div className={s.caField}>
         <label className={s.caLabel}>Attention</label>
         <input className={s.caInputInline} placeholder="Example: John Smith" />
       </div>
@@ -200,7 +198,7 @@ function AddrForm({
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 function ChangeAddressModal({
@@ -208,12 +206,12 @@ function ChangeAddressModal({
   onSelect,
   currentAddr,
 }: {
-  onClose: () => void
-  onSelect: (name: string, addr: string) => void
-  currentAddr: { name: string, addr: string }
+  onClose: () => void;
+  onSelect: (name: string, addr: string) => void;
+  currentAddr: { name: string; addr: string };
 }) {
-  const [view, setView] = useState<ChangeAddrView>("select")
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
+  const [view, setView] = useState<ChangeAddrView>("select");
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const addresses = [
     {
       name: "MISUMI USA WOS+",
@@ -230,7 +228,7 @@ function ChangeAddressModal({
       addr: "1020 Meacham Rd, Schaumburg, IL 60173",
       primary: false,
     },
-  ]
+  ];
 
   return (
     <div className={s.modalOverlay}>
@@ -361,9 +359,9 @@ function ChangeAddressModal({
                     <button
                       className={s.caUseAddrBtn}
                       onClick={(e) => {
-                        e.stopPropagation()
-                        onSelect(a.name, a.addr)
-                        onClose()
+                        e.stopPropagation();
+                        onSelect(a.name, a.addr);
+                        onClose();
                       }}
                     >
                       Use this address
@@ -389,8 +387,8 @@ function ChangeAddressModal({
                     onSelect(
                       addresses[selectedIdx].name,
                       addresses[selectedIdx].addr,
-                    )
-                    onClose()
+                    );
+                    onClose();
                   }
                 }}
                 className={s.modalSaveBtn}
@@ -433,7 +431,7 @@ function ChangeAddressModal({
                       </svg>
                       Shipping
                     </span>
-                   </div>
+                  </div>
                 </div>
                 <button
                   onClick={() => setView("select")}
@@ -453,7 +451,7 @@ function ChangeAddressModal({
               }}
               submitLabel="Save & Use Address"
               onSubmit={() => {
-                onClose()
+                onClose();
               }}
               onCancel={() => setView("select")}
             />
@@ -470,7 +468,7 @@ function ChangeAddressModal({
             <AddrForm
               submitLabel="Add Address"
               onSubmit={() => {
-                onClose()
+                onClose();
               }}
               onCancel={() => setView("select")}
             />
@@ -478,7 +476,7 @@ function ChangeAddressModal({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function PanelHeader({
@@ -490,19 +488,19 @@ function PanelHeader({
   onEdit,
   onClick,
 }: {
-  isOpen: boolean
-  isCompleted: boolean
-  stepNum: number
-  title: string
-  summary?: React.ReactNode
-  onEdit?: () => void
-  onClick?: () => void
+  isOpen: boolean;
+  isCompleted: boolean;
+  stepNum: number;
+  title: string;
+  summary?: React.ReactNode;
+  onEdit?: () => void;
+  onClick?: () => void;
 }) {
   const headerClass = isCompleted
     ? s.panelHeaderCompleted
     : isOpen
       ? s.panelHeaderOpen
-      : s.panelHeaderPending
+      : s.panelHeaderPending;
   return (
     <div
       onClick={!isOpen && !isCompleted ? onClick : undefined}
@@ -527,8 +525,8 @@ function PanelHeader({
       {isCompleted && !isOpen && onEdit && (
         <button
           onClick={(e) => {
-            e.stopPropagation()
-            onEdit()
+            e.stopPropagation();
+            onEdit();
           }}
           className={s.editBtn}
         >
@@ -545,7 +543,7 @@ function PanelHeader({
         </button>
       )}
     </div>
-  )
+  );
 }
 
 function Panel1Content({
@@ -553,32 +551,24 @@ function Panel1Content({
   onChangeAddress,
   selectedAddr,
 }: {
-  onNext: () => void
-  onChangeAddress: () => void
-  selectedAddr: { name: string, addr: string, phone: string }
+  onNext: () => void;
+  onChangeAddress: () => void;
+  selectedAddr: { name: string; addr: string; phone: string };
 }) {
   return (
     <div className={s.panel1Content}>
       <div className={s.selectedAddrSection}>
         <div className={s.selectedAddrHeader}>
-          <span className={s.selectedAddrLabel}>SELECTED ADDRESS</span>
+          <span className={s.selectedAddrLabel}>Selected Address</span>
           <button onClick={onChangeAddress} className={s.selectNewAddrBtn}>
-            <svg className={s.editBtnIcon} fill="none" viewBox="0 0 14 14">
-              <path
-                d={svgPaths.p1c2f1080}
-                stroke="#0062BD"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.16667"
-              />
-            </svg>{" "}
-            Change Address
+            <span style={{ fontSize: "16px", lineHeight: "1" }}>+</span> Select
+            New Address
           </button>
         </div>
         <div className={s.addrCard}>
-          <div className={s.addrCardName}>{selectedAddr.name}</div>
           <div className={s.addrCardRow}>
-            <div>
+            <div className={s.addrCardColLeft}>
+              <div className={s.addrCardName}>{selectedAddr.name}</div>
               {selectedAddr.addr.split("\n").map((line, i) => (
                 <div key={i} className={s.addrCardLine}>
                   {line}
@@ -589,13 +579,14 @@ function Panel1Content({
                 {selectedAddr.phone}
               </div>
             </div>
-            <div>
+            <div className={s.addrCardColRight}>
               <div className={s.addrCardMeta}>
                 <span className={s.addrCardMetaBold}>
                   Carrier Account Number:
-                </span>
+                </span>{" "}
+                ** 0012
               </div>
-              <div className={s.addrCardMeta} style={{ marginTop: "0.25rem" }}>
+              <div className={s.addrCardMetaDivider}>
                 <span className={s.addrCardMetaBold}>
                   Default Shipping Method:
                 </span>{" "}
@@ -613,6 +604,20 @@ function Panel1Content({
                 <input className={s.addrCardInput} defaultValue="John Smith" />
               </div>
             </div>
+            <div className={s.addrCardActions}>
+              <button onClick={onChangeAddress} className={s.selectNewAddrBtn}>
+                <svg className={s.editBtnIcon} fill="none" viewBox="0 0 14 14">
+                  <path
+                    d={svgPaths.p1c2f1080}
+                    stroke="#0062BD"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.16667"
+                  />
+                </svg>{" "}
+                Edit
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -623,7 +628,7 @@ function Panel1Content({
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 function Panel2Content({
@@ -632,71 +637,71 @@ function Panel2Content({
   defaultAccountNumber,
   onAccountChange,
 }: {
-  onNext: () => void
-  defaultCarrierMethod: string
-  defaultAccountNumber: string
-  onAccountChange: (method: string, account: string) => void
+  onNext: () => void;
+  defaultCarrierMethod: string;
+  defaultAccountNumber: string;
+  onAccountChange: (method: string, account: string) => void;
 }) {
   const [fulfillment, setFulfillment] = useState<"split" | "complete">(
     "complete",
-  )
+  );
   const [shippingType, setShippingType] = useState<"billed" | "prepaid">(
     "billed",
-  )
-  const [speedMethod, setSpeedMethod] = useState("ground")
+  );
+  const [speedMethod, setSpeedMethod] = useState("ground");
   const [savedAccount, setSavedAccount] = useState<{
-    method: string
-    account: string
+    method: string;
+    account: string;
   } | null>(
     defaultAccountNumber
       ? { method: defaultCarrierMethod, account: defaultAccountNumber }
       : null,
-  )
+  );
   // accountForm: null = closed, "add" = adding new, "edit" = editing existing
-  const [accountForm, setAccountForm] = useState<"add" | "edit" | null>(null)
-  const [formCarrier, setFormCarrier] = useState("")
-  const [formAccountNum, setFormAccountNum] = useState("")
+  const [accountForm, setAccountForm] = useState<"add" | "edit" | null>(null);
+  const [formCarrier, setFormCarrier] = useState("");
+  const [formAccountNum, setFormAccountNum] = useState("");
 
   function carrierBadgeFor(method: string) {
-    if (method.startsWith("fedex")) return "fedex"
-    if (method.startsWith("ups")) return "ups"
-    return null
+    if (method.startsWith("fedex")) return "fedex";
+    if (method.startsWith("ups")) return "ups";
+    return null;
   }
 
   function maskAccount(acct: string) {
-    if (acct.length <= 4) return acct
-    return "*".repeat(acct.length - 4) + acct.slice(-4)
+    if (acct.length <= 4) return acct;
+    return "*".repeat(acct.length - 4) + acct.slice(-4);
   }
 
   function openAdd() {
-    setFormCarrier("")
-    setFormAccountNum("")
-    setAccountForm("add")
+    setFormCarrier("");
+    setFormAccountNum("");
+    setAccountForm("add");
   }
 
   function openEdit() {
     if (savedAccount) {
-      setFormCarrier(savedAccount.method)
-      setFormAccountNum(savedAccount.account)
-      setAccountForm("edit")
+      setFormCarrier(savedAccount.method);
+      setFormAccountNum(savedAccount.account);
+      setAccountForm("edit");
     }
   }
 
   function cancelForm() {
-    setAccountForm(null)
-    setFormCarrier("")
-    setFormAccountNum("")
+    setAccountForm(null);
+    setFormCarrier("");
+    setFormAccountNum("");
   }
 
   function saveForm() {
     if (formCarrier && formAccountNum.trim()) {
-      const saved = { method: formCarrier, account: formAccountNum.trim() }
-      setSavedAccount(saved)
-      onAccountChange(saved.method, saved.account)
+      const saved = { method: formCarrier, account: formAccountNum.trim() };
+      setSavedAccount(saved);
+      onAccountChange(saved.method, saved.account);
     }
-    setAccountForm(null)
-    setFormCarrier("")
-    setFormAccountNum("")
+    setAccountForm(null);
+    setFormCarrier("");
+    setFormAccountNum("");
   }
   return (
     <div className={s.panel2Content}>
@@ -793,8 +798,8 @@ function Panel2Content({
               <div className={s.shippingToggle}>
                 <button
                   onClick={() => {
-                    setShippingType("prepaid")
-                    setAccountForm(null)
+                    setShippingType("prepaid");
+                    setAccountForm(null);
                   }}
                   className={[
                     s.shippingToggleBtn,
@@ -805,8 +810,8 @@ function Panel2Content({
                 </button>
                 <button
                   onClick={() => {
-                    setShippingType("billed")
-                    setAccountForm(null)
+                    setShippingType("billed");
+                    setAccountForm(null);
                   }}
                   className={[
                     s.shippingToggleBtn,
@@ -900,19 +905,19 @@ function Panel2Content({
                     </div>
                     <button onClick={openEdit} className={s.carrierEditBtn}>
                       <svg
+                        className={s.editBtnIcon}
                         fill="none"
                         viewBox="0 0 14 14"
-                        style={{ width: 14, height: 14 }}
                       >
                         <path
-                          d="M8.88533 3.052L10.948 5.11467M9.76033 2.177C10.3295 1.60779 11.2538 1.60779 11.823 2.177C12.3922 2.74621 12.3922 3.67046 11.823 4.23967L3.79167 12.271H1.75V10.1873L9.76033 2.177L8.88533 3.052"
-                          stroke="#64748B"
+                          d={svgPaths.p1c2f1080}
+                          stroke="#0062BD"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth="1.16667"
                         />
                       </svg>
-                      <span className={s.carrierEditLabel}>Edit</span>
+                      Edit
                     </button>
                   </div>
                 ) : (
@@ -1048,7 +1053,7 @@ function Panel2Content({
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 function PackageTable({
@@ -1057,22 +1062,22 @@ function PackageTable({
   shipsOn,
   items,
 }: {
-  packageLabel: string
-  shipsFrom: string
-  shipsOn: string
+  packageLabel: string;
+  shipsFrom: string;
+  shipsOn: string;
   items: {
-    img: string
-    alias: string
-    partNum: string
-    name: string
-    desc: string
-    brand: string
-    unitPrice: string
-    qty: number
-    subtotal: string
-    location: string
-    shipsOn: string
-  }[]
+    img: string;
+    alias: string;
+    partNum: string;
+    name: string;
+    desc: string;
+    brand: string;
+    unitPrice: string;
+    qty: number;
+    subtotal: string;
+    location: string;
+    shipsOn: string;
+  }[];
 }) {
   return (
     <div className={s.packageTableWrap}>
@@ -1170,7 +1175,7 @@ function PackageTable({
         </span>
       </div>
     </div>
-  )
+  );
 }
 
 function CardBadges() {
@@ -1186,36 +1191,36 @@ function CardBadges() {
       </div>
       <div className={s.badgeAmex}>AMEX</div>
     </div>
-  )
+  );
 }
 
 function Panel3Content({
   onComplete,
   onDisable,
 }: {
-  onComplete: () => void
-  onDisable: () => void
+  onComplete: () => void;
+  onDisable: () => void;
 }) {
-  const [method, setMethod] = useState<"po" | "card">("po")
-  const [poNumber, setPoNumber] = useState("")
-  const [cardNumber, setCardNumber] = useState("")
-  const poFilled = poNumber.trim().length > 0
-  const cardFilled = cardNumber.trim().length > 0
+  const [method, setMethod] = useState<"po" | "card">("po");
+  const [poNumber, setPoNumber] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const poFilled = poNumber.trim().length > 0;
+  const cardFilled = cardNumber.trim().length > 0;
   function switchMethod(m: "po" | "card") {
-    setMethod(m)
-    setPoNumber("")
-    setCardNumber("")
-    onDisable()
+    setMethod(m);
+    setPoNumber("");
+    setCardNumber("");
+    onDisable();
   }
   function handlePoChange(val: string) {
-    setPoNumber(val)
-    if (val.trim().length > 0) onComplete()
-    else onDisable()
+    setPoNumber(val);
+    if (val.trim().length > 0) onComplete();
+    else onDisable();
   }
   function handleCardChange(val: string) {
-    setCardNumber(val)
-    if (val.trim().length > 0) onComplete()
-    else onDisable()
+    setCardNumber(val);
+    if (val.trim().length > 0) onComplete();
+    else onDisable();
   }
   return (
     <div className={s.panel3Content}>
@@ -1238,11 +1243,11 @@ function Panel3Content({
               >
                 <div
                   className={[
-                    s.paymentRadioCircle,
-                    method === "po" ? s.paymentRadioCircleActive : "",
+                    s.radioCircle,
+                    method === "po" ? s.radioCircleActive : "",
                   ].join(" ")}
                 >
-                  {method === "po" && <div className={s.paymentRadioDot} />}
+                  {method === "po" && <div className={s.radioDot} />}
                 </div>
                 <span className={s.paymentOptionTitle}>
                   Pay on Terms (Corporate PO Invoicing)
@@ -1298,11 +1303,11 @@ function Panel3Content({
               >
                 <div
                   className={[
-                    s.paymentRadioCircle,
-                    method === "card" ? s.paymentRadioCircleActive : "",
+                    s.radioCircle,
+                    method === "card" ? s.radioCircleActive : "",
                   ].join(" ")}
                 >
-                  {method === "card" && <div className={s.paymentRadioDot} />}
+                  {method === "card" && <div className={s.radioDot} />}
                 </div>
                 <div className={s.paymentCardTitleCol}>
                   <span className={s.paymentCardTitle}>
@@ -1319,25 +1324,17 @@ function Panel3Content({
             </div>
             {method === "card" && (
               <>
-                <div className={s.cardPoRefRow}>
-                  <span className={s.cardPoRefLabel}>
-                    Purchase Order / Job Reference # (Optional for Credit Card):
-                  </span>
-                  <div className={s.cardPoRefValue}>
-                    <p className={s.cardPoRefText}>PO-98421-B</p>
-                  </div>
-                </div>
                 <div className={s.cardFormWrap}>
                   <div className={s.cardFormHeader}>
+                    <div className={s.cardFormDivider} />
                     <h3 className={s.cardFormTitle}>
                       Enter your credit card information
                     </h3>
-                    <div className={s.cardFormDivider} />
                     <p className={s.cardFormSubtitle}>
                       Please enter a new credit card number.{" "}
-                      <strong className={s.cardFormRequired}>
+                      <span className={s.cardFormRequired}>
                         * required fields
-                      </strong>
+                      </span>
                     </p>
                   </div>
                   <div className={s.cardFormTable}>
@@ -1580,6 +1577,14 @@ function Panel3Content({
                     </div>
                   </div>
                 </div>
+                <div className={s.cardPoRefRow}>
+                  <span className={s.cardPoRefLabel}>
+                    Purchase Order / Job Reference # (Optional for Credit Card):
+                  </span>
+                  <div className={s.cardPoRefValue}>
+                    <p className={s.cardPoRefText}>PO-98421-B</p>
+                  </div>
+                </div>
               </>
             )}
           </div>
@@ -1589,7 +1594,7 @@ function Panel3Content({
         <button className={s.backBtn}>← Previous Step</button>
       </div>
     </div>
-  )
+  );
 }
 
 function OrderSidebar({ orderEnabled }: { orderEnabled: boolean }) {
@@ -1693,25 +1698,27 @@ function OrderSidebar({ orderEnabled }: { orderEnabled: boolean }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function CheckoutPage() {
-  const [openPanel, setOpenPanel] = useState<1 | 2 | 3>(1)
-  const [completedPanels, setCompletedPanels] = useState<Set<number>>(new Set())
-  const [modal, setModal] = useState<ModalType>(null)
+  const [openPanel, setOpenPanel] = useState<1 | 2 | 3>(1);
+  const [completedPanels, setCompletedPanels] = useState<Set<number>>(
+    new Set(),
+  );
+  const [modal, setModal] = useState<ModalType>(null);
   const [selectedAddr, setSelectedAddr] = useState({
     name: "MISUMI USA WOS+",
-    addr: "1475 E Woodfield Rd.\nSte 1300\nSchaumburg, IL 60173-5482\nUSA",
+    addr: "1475 E Woodfield Rd.\nSte 1300\nSchaumburg, IL 60173-5482 USA",
     phone: "1-800-681-7475",
-  })
+  });
   const [addressCarrierMethod, setAddressCarrierMethod] =
-    useState("ups-collect")
-  const [addressAccountNumber, setAddressAccountNumber] = useState("000012")
+    useState("ups-collect");
+  const [addressAccountNumber, setAddressAccountNumber] = useState("000012");
   const advanceTo = (next: 1 | 2 | 3, completed: number) => {
-    setCompletedPanels((prev) => new Set([...prev, completed]))
-    setOpenPanel(next)
-  }
+    setCompletedPanels((prev) => new Set([...prev, completed]));
+    setOpenPanel(next);
+  };
   return (
     <div className={s.page}>
       {modal === "change" && (
@@ -1799,7 +1806,9 @@ export default function CheckoutPage() {
               title="Shipping Options"
               summary={
                 completedPanels.has(2) ? (
-                  <span className={s.panelSummaryText}>3 items</span>
+                  <span className={s.panelSummaryText}>
+                    3 items • UPS Ground • Est. ship: Sep 2
+                  </span>
                 ) : !completedPanels.has(2) && openPanel !== 2 ? (
                   <span className={s.panelSummaryText}>3 items</span>
                 ) : undefined
@@ -1815,8 +1824,8 @@ export default function CheckoutPage() {
                 defaultCarrierMethod={addressCarrierMethod}
                 defaultAccountNumber={addressAccountNumber}
                 onAccountChange={(m, n) => {
-                  setAddressCarrierMethod(m)
-                  setAddressAccountNumber(n)
+                  setAddressCarrierMethod(m);
+                  setAddressAccountNumber(n);
                 }}
               />
             )}
@@ -1839,9 +1848,9 @@ export default function CheckoutPage() {
                 }
                 onDisable={() =>
                   setCompletedPanels((prev) => {
-                    const sNew = new Set(prev)
-                    sNew.delete(3)
-                    return sNew
+                    const sNew = new Set(prev);
+                    sNew.delete(3);
+                    return sNew;
                   })
                 }
               />
@@ -1866,5 +1875,5 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

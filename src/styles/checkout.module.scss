@@ -12,7 +12,7 @@
 /* ── Header ── */
 .header {
   background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .headerAccent {
@@ -181,7 +181,10 @@
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   width: 100%;
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .panelHeaderOpen {
@@ -192,13 +195,17 @@
 .panelHeaderCompleted {
   background-color: #f2f2f2;
   cursor: default;
-  &:hover { background-color: #e8e8e8; }
+  &:hover {
+    background-color: #e8e8e8;
+  }
 }
 
 .panelHeaderPending {
   background-color: #ebf1f9;
   cursor: pointer;
-  &:hover { background-color: #d8e8f5; }
+  &:hover {
+    background-color: #d8e8f5;
+  }
 }
 
 .panelHeaderLeft {
@@ -230,13 +237,13 @@
 .panelSummaryText {
   font-family: "Roboto:Regular", sans-serif;
   font-size: 12px;
-  color: #475569;
+  color: #555;
 }
 
 .panelSummaryTextPre {
   font-family: "Roboto:Regular", sans-serif;
   font-size: 12px;
-  color: #475569;
+  color: #555;
   white-space: pre;
 }
 
@@ -257,7 +264,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .editBtnIcon {
@@ -286,8 +295,8 @@
 .selectedAddrLabel {
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
+  color: #333;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -299,8 +308,6 @@
   padding: 1rem;
   display: flex;
   flex-flow: column;
-  flex-wrap: wrap;
-  gap: 6px;
 }
 
 .addrCardRow {
@@ -308,12 +315,25 @@
   flex-wrap: wrap;
   gap: 2rem;
 }
+.addrCardColLeft {
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: column;
+}
+.addrCardColRight {
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: column;
+  border-left: 1px solid #e5e7eb;
+  padding-left: 2rem;
+}
 
 .addrCardName {
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .addrCardLine {
@@ -326,7 +346,7 @@
 .addrCardPhone {
   font-family: "Roboto:Regular", sans-serif;
   font-size: 12px;
-  margin-top:6px;
+  margin-top: 0.5rem;
   color: #555;
 }
 
@@ -339,6 +359,14 @@
   font-family: "Roboto:Regular", sans-serif;
   font-size: 12px;
   color: #555;
+}
+
+.addrCardMetaDivider {
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 12px;
+  color: #555;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .addrCardMetaBold {
@@ -380,9 +408,11 @@
   padding-bottom: 0.125rem;
   font-size: 12px;
   width: 11rem;
-  color: #333;
+  color: #555;
   outline: none;
-  &:focus { border-color: #0062bd; }
+  &:focus {
+    border-color: #0062bd;
+  }
 }
 
 .addrCardActions {
@@ -406,7 +436,12 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
+  &:hover span {
+    text-decoration: none;
+  }
 }
 
 .panel1Footer {
@@ -425,13 +460,15 @@
   padding-bottom: 0.5rem;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #374151;
+  color: #333;
   background: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  &:hover { background-color: #f9fafb; }
+  &:hover {
+    background-color: #f9fafb;
+  }
 }
 
 .nextBtn {
@@ -441,7 +478,7 @@
   font-weight: 700;
   font-size: 13px;
   border-radius: 4px;
-  border: none;
+  border: solid 1px #0062bd;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
   padding-top: 0.5rem;
@@ -450,7 +487,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  &:hover { background-color: #0055a0; }
+  &:hover {
+    background-color: #0055a0;
+  }
 }
 
 /* ── Panel 2 content ── */
@@ -470,15 +509,16 @@
 
 .shippingOptionsInner {
   display: flex;
-  gap: 2.5rem;
+  gap: 2rem;
   align-items: flex-start;
 }
 
 .fulfillmentCol {
-  width: 425px;
+  width: 50%;
   display: flex;
+  flex: 1 1 0%;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .sectionNumberRow {
@@ -504,23 +544,23 @@
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   font-size: 14px;
-  color: #1e293b;
+  color: #333;
   letter-spacing: 0.35px;
   text-transform: uppercase;
 }
 
 .fulfillmentCards {
   display: flex;
-  gap: 0.75rem;
-  flex-direction:column;
+  gap: 0.5rem;
+  flex-direction: column;
 }
 
 .fulfillmentCard {
   flex: 1 1 0%;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 18px 18px 8px 18px;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  padding: 1rem 1rem 0.5rem 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   background-color: #ffffff;
 }
 
@@ -569,8 +609,8 @@
 
 .fulfillmentCardLabel {
   font-size: 14px;
-  font-family: "Roboto:Regular", sans-serif;
-  color: #1e293b;
+  font-family: "Roboto:Medium", sans-serif;
+  color: #333;
 }
 
 .fulfillmentCardLabelActive {
@@ -606,17 +646,19 @@
 }
 
 .fulfillmentCardDesc {
-  color: #475569;
+  color: #555;
   font-size: 12px;
   font-style: normal;
+  max-width: 250px;
   font-family: "Roboto:Regular", sans-serif;
 }
 
 .shippingMethodCol {
   flex: 1 1 0%;
+  max-width:380px;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   align-self: stretch;
 }
 
@@ -648,9 +690,9 @@
   border: none;
   background: none;
   border-radius: 4px;
-  font-family: "Roboto:Regular", sans-serif;
+  font-family: "Roboto:Medium", sans-serif;
   font-size: 14px;
-  color: #1e293b;
+  color: #333;
   cursor: pointer;
   text-align: center;
   padding: 6px 8px;
@@ -714,24 +756,30 @@
 .carrierPillLabel {
   font-family: "Roboto:Regular", sans-serif;
   font-size: 14px;
-  color: #334155;
+  color: #555;
 }
 
 .carrierPillNumber {
-  font-family: "Roboto:SemiBold", sans-serif;
-  font-weight: 600;
+  font-family: "Roboto:Regular ", sans-serif;
+  font-weight: 400;
   font-size: 14px;
-  color: #0f172a;
+  color: #555;
 }
 
 .carrierEditBtn {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.25rem;
+  color: #0062bd;
+  font-size: 12px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
   background: none;
   border: none;
   cursor: pointer;
-  flex-shrink: 0;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .carrierEditLabel {
@@ -742,13 +790,11 @@
 
 /* Add / edit carrier account CTA row */
 .carrierFormTitle {
-  font-family: "Roboto:SemiBold", sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  color: #475569;
-  text-transform: uppercase;
+  font-family: "Roboto:Medium", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
   letter-spacing: 0.4px;
-  padding-left:0.1rem;
   margin: 0;
 }
 
@@ -760,7 +806,7 @@
   height: 42px;
   font-size: 14px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #1e293b;
+  color: #333;
   width: 100%;
   outline: none;
 
@@ -773,40 +819,46 @@
 .carrierCtaRow {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-top: 12px;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .carrierCtaCancel {
-  flex: 1 0 0;
-  height: 42px;
-  background-color: rgba(15,15,15, 0.05);
-  border: none;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
-  font-family: "Roboto:SemiBold", sans-serif;
-  font-weight: 600;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
   font-size: 14px;
-  color: #004bb1;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  color: #333;
+  background: none;
   cursor: pointer;
-  transition: background-color 0.15s ease;
-
   &:hover {
-    background-color: rgba(15,15,15, 0.12);
+    background-color: #f9fafb;
   }
 }
 
 .carrierCtaSave {
-  flex: 1 0 26px;
-  height: 42px;
-  background-color: #0169c6;
-  border: 1px solid #004bb1;
-  border-radius: 4px;
-  font-family: "Roboto:SemiBold", sans-serif;
-  font-weight: 600;
-  font-size: 14px;
+  background-color: #0066c0;
   color: #ffffff;
+  border-radius: 4px;
+  border: none;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 14px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: background-color 0.15s ease;
+  &:hover {
+    background-color: #0055a0;
+  }
 
   &:hover:not(:disabled) {
     background-color: #0055a0;
@@ -826,7 +878,7 @@
   height: 42px;
   font-size: 14px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #1e293b;
+  color: #333;
   width: 100%;
   cursor: pointer;
   appearance: auto;
@@ -845,7 +897,7 @@
   font-family: "Roboto:SemiBold", sans-serif;
   font-weight: 600;
   font-size: 12px;
-  color: #1e293b;
+  color: #333;
 }
 
 .accountNumber {
@@ -937,8 +989,8 @@
 .packageLabel {
   background-color: #0062bd;
   color: #ffffff;
-  font-family: "Roboto:SemiBold", sans-serif;
-  font-weight: 600;
+  font-family: "Roboto:Medium", sans-serif;
+  font-weight: 500;
   font-size: 13px;
   padding-left: 0.625rem;
   padding-right: 0.625rem;
@@ -948,13 +1000,13 @@
 }
 
 .packageMetaText {
-  color: #374151;
+  color: #333;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
 }
 
 .packageMetaSep {
-  color: #9ca3af;
+  color: #ccc;
   font-size: 13px;
 }
 
@@ -1000,7 +1052,9 @@
   display: grid;
   grid-template-columns: 2fr 90px 80px 110px 1fr 50px;
   border-bottom: 1px solid #bfbfbf;
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .packageTableCellProduct {
@@ -1180,7 +1234,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .packageTableCellDelete {
@@ -1201,7 +1255,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .packageTableNote {
@@ -1230,7 +1286,7 @@
 
 .noteText {
   font-size: 11px;
-  color: #475569;
+  color: #555;
   font-family: "Roboto:Italic", sans-serif;
   font-style: italic;
 }
@@ -1245,23 +1301,23 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1.5rem;
+  padding: 1.25rem;
 }
 
 .paymentCard {
   position: relative;
   border-radius: 8px;
   width: 100%;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,.05));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .paymentCardActive {
   background-color: #ffffff;
-  border: 2px solid #00529b;
+  border: 2px solid #0062bd;
 }
 
 .paymentCardInactive {
-  background-color: rgba(249, 250, 251, 0.5);
+  background-color: #fff;
   border: 1px solid #d1d5db;
 }
 
@@ -1269,14 +1325,14 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 26px;
+  padding: 1.25rem;
 }
 
 .paymentCardInnerCard {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 22px;
+  gap: 1rem;
+  padding: 1.25rem;
 }
 
 .paymentRadioRow {
@@ -1314,8 +1370,8 @@
 }
 
 .paymentRadioCircleActive {
-  border-color: #00529b;
-  background-color: #00529b;
+  border-color: #0062bd;
+  background-color: #0062bd;
 }
 
 .paymentRadioDot {
@@ -1334,7 +1390,7 @@
 
 .paymentCardTopRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   padding-top: 1px;
@@ -1352,7 +1408,7 @@
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   font-size: 16px;
-  color: #374151;
+  color: #333;
 }
 
 .paymentCardSubtitle {
@@ -1372,7 +1428,7 @@
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   font-size: 12px;
-  color: #374151;
+  color: #333;
   letter-spacing: 0.6px;
   text-transform: uppercase;
 }
@@ -1399,11 +1455,11 @@
   font-family: "Liberation Mono", monospace;
   color: #111827;
   width: 100%;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   outline: none;
   &:focus {
-    border-color: #00529b;
-    box-shadow: 0 0 0 1px #00529b;
+    border-color: #0062bd;
+    box-shadow: 0 0 0 1px #0062bd;
   }
 }
 
@@ -1449,7 +1505,7 @@
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,.05));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .mastercardCircles {
@@ -1500,22 +1556,23 @@
   text-transform: uppercase;
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,.05));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 /* ── Credit card form ── */
 .cardPoRefRow {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 0.75rem;
+
+  padding-top: 1rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
 }
 
 .cardPoRefLabel {
-  font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
-  color: #374151;
+  font-family: "Roboto:Medium", sans-serif;
+  font-size: 14px;
+  color: #333;
 }
 
 .cardPoRefValue {
@@ -1523,7 +1580,7 @@
   border-radius: 4px;
   background-color: #ffffff;
   border: 1px solid #d1d5db;
-  padding-left: 0.75rem;
+  padding-left: 0.5rem;
   padding-right: 0.375rem;
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
@@ -1532,8 +1589,9 @@
 
 .cardPoRefText {
   font-family: "Liberation Mono", monospace;
-  font-size: 12px;
-  color: #374151;
+  font-size: 14px;
+  margin: 0;
+  color: #333;
 }
 
 .cardFormWrap {
@@ -1544,47 +1602,52 @@
 }
 
 .cardFormHeader {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .cardFormTitle {
-  font-family: "Roboto:Bold", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
+  font-family: "Roboto:Medium", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 1rem 0 0 0;
   color: #111827;
-  letter-spacing: -0.5px;
 }
 
 .cardFormDivider {
-  border-top: 1px solid #9ca3af;
+  border-top: 1px solid #e5e7eb;
   width: 100%;
 }
 
 .cardFormSubtitle {
   font-family: "Roboto:Regular", sans-serif;
+  font-weight: 400;
   font-size: 12px;
-  color: #374151;
+  margin: 0;
+  padding-top:0.5rem;
+  color: #333;
 }
 
 .cardFormRequired {
   color: #ea580c;
-  font-family: "Roboto:Bold", sans-serif;
 }
 
 .cardFormTable {
   border: 1px solid #d1d5db;
   width: 100%;
+  & p{
+    margin: 0;
+  }
 }
 
 .cardFormRow {
   display: flex;
   align-items: stretch;
   border-bottom: 1px solid #e5e7eb;
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .cardFormLabel {
@@ -1604,7 +1667,7 @@
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   font-size: 13px;
-  color: #374151;
+  color: #333;
 }
 
 .cardFormLabelRequired {
@@ -1677,8 +1740,8 @@
   outline: none;
   padding-right: 2rem;
   &:focus {
-    border-color: #00529b;
-    box-shadow: 0 0 0 1px #00529b;
+    border-color: #0062bd;
+    box-shadow: 0 0 0 1px #0062bd;
   }
 }
 
@@ -1931,7 +1994,9 @@
 }
 
 .sidebarShippingLabel {
-  div:first-child { color: #333; }
+  div:first-child {
+    color: #333;
+  }
   div:last-child {
     font-family: "Roboto:Regular", sans-serif;
     font-weight: 400;
@@ -1941,7 +2006,9 @@
 
 .sidebarShippingValue {
   text-align: right;
-  div:first-child { color: #000000; }
+  div:first-child {
+    color: #000000;
+  }
   div:last-child {
     font-family: "Roboto:Regular", sans-serif;
     font-weight: 400;
@@ -1982,7 +2049,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  &:hover { background-color: #e5e5e5; }
+  &:hover {
+    background-color: #e5e5e5;
+  }
 }
 
 .promoApplyText {
@@ -2012,14 +2081,19 @@
   font-size: 16px;
   text-align: center;
   border: 1px solid #d1d5db;
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .submitBtnEnabled {
   background-color: #cf4817;
   color: #ffffff;
   cursor: pointer;
-  &:hover { background-color: #b83d13; }
+  &:hover {
+    background-color: #b83d13;
+  }
 }
 
 .submitBtnDisabled {
@@ -2044,7 +2118,9 @@
   color: #333;
   text-align: center;
   cursor: pointer;
-  &:hover { background-color: #f9fafb; }
+  &:hover {
+    background-color: #f9fafb;
+  }
 }
 
 .sidebarDivider {
@@ -2104,7 +2180,9 @@
   font-size: 12px;
   color: #004bb1;
   font-family: "Roboto:Regular", sans-serif;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* ── Modal overlays ── */
@@ -2127,7 +2205,7 @@
 .modalBox {
   background-color: #ffffff;
   border-radius: 2px;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   width: 100%;
   border: 1px solid #d1d5db;
 }
@@ -2168,7 +2246,9 @@
   cursor: pointer;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-  &:hover { color: #374151; }
+  &:hover {
+    color: #333;
+  }
 }
 
 .modalBody {
@@ -2196,15 +2276,17 @@
   border-radius: 4px;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
   font-size: 14px;
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
-  color: #374151;
+  color: #333;
   background: none;
   cursor: pointer;
-  &:hover { background-color: #f9fafb; }
+  &:hover {
+    background-color: #f9fafb;
+  }
 }
 
 .modalSaveBtn {
@@ -2220,8 +2302,10 @@
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
-  &:hover { background-color: #0055a0; }
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  &:hover {
+    background-color: #0055a0;
+  }
 }
 
 /* ── Change Address modal ── */
@@ -2259,13 +2343,13 @@
   font-family: "Roboto:Bold", sans-serif;
   font-weight: 700;
   font-size: 13px;
-  color: #374151;
+  color: #333;
   margin: 0 0 10px 0;
 }
 
 .caCurrentCard {
   border: 2px solid #0062bd;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 12px 14px;
   display: flex;
   align-items: flex-start;
@@ -2343,7 +2427,9 @@
   flex-shrink: 0;
   white-space: nowrap;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .caCancelLink {
@@ -2356,7 +2442,9 @@
   flex-shrink: 0;
   white-space: nowrap;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .caSavedHeader {
@@ -2365,7 +2453,9 @@
   justify-content: space-between;
   margin-bottom: 10px;
 
-  .caSectionTitle { margin-bottom: 0; }
+  .caSectionTitle {
+    margin-bottom: 0;
+  }
 }
 
 .caAddLink {
@@ -2377,7 +2467,9 @@
   color: #0062bd;
   white-space: nowrap;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .caSearchRow {
@@ -2400,11 +2492,15 @@
   padding: 8px 12px 8px 32px;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #374151;
+  color: #333;
   outline: none;
 
-  &::placeholder { color: #9ca3af; }
-  &:focus { border-color: #0062bd; }
+  &::placeholder {
+    color: #9ca3af;
+  }
+  &:focus {
+    border-color: #0062bd;
+  }
 }
 
 .caSearchIcon {
@@ -2428,7 +2524,9 @@
   cursor: pointer;
   white-space: nowrap;
 
-  &:hover { background-color: #333; }
+  &:hover {
+    background-color: #333;
+  }
 }
 
 .caSavedList {
@@ -2446,7 +2544,9 @@
   padding: 10px 12px;
   cursor: pointer;
 
-  &:hover { border-color: #9cc8ec; }
+  &:hover {
+    border-color: #9cc8ec;
+  }
 }
 
 .caSavedItemSelected {
@@ -2519,7 +2619,9 @@
   white-space: nowrap;
   flex-shrink: 0;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Back link / Add new heading */
@@ -2535,7 +2637,9 @@
   margin-bottom: 16px;
   padding: 0;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .caAddTitle {
@@ -2585,7 +2689,7 @@
 .caLabel {
   font-family: "Roboto:Regular", sans-serif;
   font-size: 13px;
-  color: #374151;
+  color: #333;
 }
 
 .caTaxableHelp {
@@ -2608,11 +2712,16 @@
   padding: 8px 12px;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #374151;
+  color: #333;
   outline: none;
 
-  &::placeholder { color: #9ca3af; }
-  &:focus { border-color: #0062bd; box-shadow: 0 0 0 1px #0062bd; }
+  &::placeholder {
+    color: #9ca3af;
+  }
+  &:focus {
+    border-color: #0062bd;
+    box-shadow: 0 0 0 1px #0062bd;
+  }
 }
 
 .caInputInline {
@@ -2622,11 +2731,15 @@
   padding: 6px 10px;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #374151;
+  color: #333;
   outline: none;
 
-  &::placeholder { color: #9ca3af; }
-  &:focus { border-color: #0062bd; }
+  &::placeholder {
+    color: #9ca3af;
+  }
+  &:focus {
+    border-color: #0062bd;
+  }
 }
 
 .caSelect {
@@ -2635,12 +2748,14 @@
   padding: 8px 12px;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
-  color: #374151;
+  color: #333;
   background: #fff;
   outline: none;
   appearance: auto;
 
-  &:focus { border-color: #0062bd; }
+  &:focus {
+    border-color: #0062bd;
+  }
 }
 
 .caTaxableRow {
@@ -2655,7 +2770,7 @@
   gap: 6px;
   font-family: "Roboto:Regular", sans-serif;
   font-size: 13px;
-  color: #374151;
+  color: #333;
   cursor: pointer;
 }
 
@@ -2701,7 +2816,7 @@
 .caCheckboxLabel {
   font-family: "Roboto:Regular", sans-serif;
   font-size: 13px;
-  color: #374151;
+  color: #333;
 }
 
 .caFormFooter {
@@ -2730,7 +2845,7 @@
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #374151;
+  color: #333;
   font-family: "Roboto:Regular", sans-serif;
   width: 220px;
   background-color: #ffffff;
@@ -2945,7 +3060,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 14px;
-  color: #374151;
+  color: #333;
   cursor: pointer;
 }
 
@@ -3009,13 +3124,15 @@
 }
 
 .tabActive {
-  color: #374151;
+  color: #333;
 }
 
 .tabInactive {
-  color: #374151;
+  color: #333;
   opacity: 0.5;
-  &:hover { opacity: 0.8; }
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .tabUnderline {
@@ -3024,7 +3141,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background-color: #0169C6;
+  background-color: #0169c6;
   border-radius: 2px;
 }
 

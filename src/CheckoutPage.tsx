@@ -1358,6 +1358,7 @@ function Panel3Content({
             s.paymentCard,
             method === "po" ? s.paymentCardActive : s.paymentCardInactive,
           ].join(" ")}
+          onClick={method !== "po" ? () => switchMethod("po") : undefined}
         >
           <div className={s.paymentCardInner}>
             <div
@@ -1422,6 +1423,7 @@ function Panel3Content({
             s.paymentCard,
             method === "card" ? s.paymentCardActive : s.paymentCardInactive,
           ].join(" ")}
+          onClick={method !== "card" ? () => switchMethod("card") : undefined}
         >
           <div className={s.paymentCardInnerCard}>
             <div className={s.paymentCardTopRow}>

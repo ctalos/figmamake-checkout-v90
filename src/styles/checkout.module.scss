@@ -1328,6 +1328,11 @@
 .paymentCardInactive {
   background-color: #fff;
   border: 1px solid #d1d5db;
+  transition: border-color 0.2s ease;
+  &:hover {
+    border-color: #929599;
+    cursor:pointer;
+  } 
 }
 
 .paymentCardInner {
@@ -2097,11 +2102,11 @@
 }
 
 .submitBtnEnabled {
-  background-color: #cf4817;
+  background-color: #ff730a;
   color: #ffffff;
   cursor: pointer;
   &:hover {
-    background-color: #b83d13;
+    background-color: #e76807;
   }
 }
 

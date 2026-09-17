@@ -509,7 +509,7 @@
 
 .shippingOptionsInner {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   align-items: flex-start;
 }
 
@@ -663,7 +663,6 @@
 }
 
 .shippingMethodBox {
-  background-color: #f7f9fb;
   border-radius: 4px;
   padding: 0;
   display: flex;
@@ -798,6 +797,12 @@
   margin: 0;
 }
 
+.carrierFormRequired {
+  color: #dd0000;
+  font-family: "Roboto:Regular", sans-serif;
+  font-weight: 400;
+}
+
 .carrierAccountInput {
   background-color: #ffffff;
   border: 1px solid #d1d5db;
@@ -911,8 +916,8 @@
   align-items: center;
   gap: 8px;
   border: 1px dashed #004bb1;
-  border-radius: 3px;
-  padding: 2px 8px;
+  border-radius: 4px;
+  padding: 12px 8px 11px 8px;
   background: none;
   cursor: pointer;
 
@@ -929,7 +934,7 @@
 
 .accountAddText {
   font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   color: #004bb1;
   white-space: nowrap;
 }
@@ -968,6 +973,10 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 1.25rem;
+}
+
+.panel2FooterTop {
+  margin-bottom: 2rem;
 }
 
 /* ── PackageTable ── */
@@ -2722,6 +2731,40 @@
     border-color: #0062bd;
     box-shadow: 0 0 0 1px #0062bd;
   }
+}
+
+.caInputError {
+  border-color: #dd0000;
+
+  &:focus {
+    border-color: #dd0000;
+    box-shadow: 0 0 0 1px #dd0000;
+  }
+}
+
+.caErrorRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: #dd0000;
+  font-size: 12px;
+  font-family: "Roboto:Regular", sans-serif;
+}
+
+.caErrorIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #dd0000;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .caInputInline {

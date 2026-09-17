@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import svgPaths from "../imports/svg-otyv9vxe4n";
 import svgPathsAac from "../imports/svg-aacepbrbow";
 import svgPathsGol from "../imports/svg-gol9aevr63";
@@ -15,6 +15,19 @@ const CARRIER_METHODS = [
 
 type ChangeAddrView = "select" | "edit" | "add";
 
+const METHOD_LABELS: Record<string, string> = {
+  prepaid: "Prepaid",
+  "ups-collect": "UPS Collect",
+  "ups-third-party": "UPS Third Party Billing",
+  "fedex-bill-recipient": "FedEx Bill Recipient",
+  "fedex-third-party": "FedEx Third Party Billing",
+};
+
+function maskAccount(acct: string) {
+  if (acct.length <= 4) return acct;
+  return "*".repeat(acct.length - 4) + acct.slice(-4);
+}
+
 function AddrForm({
   initialValues,
   submitLabel,
@@ -27,16 +40,41 @@ function AddrForm({
     city?: string;
     zip?: string;
     phone?: string;
+    shippingMethod?: string;
+    carrierAccountNum?: string;
   };
   submitLabel: string;
-  onSubmit: () => void;
+  onSubmit: (data: { shippingMethod: string; carrierAccountNum: string }) => void;
   onCancel: () => void;
 }) {
-  const [shippingMethod, setShippingMethod] = useState("");
+  const [shippingMethod, setShippingMethod] = useState(
+    initialValues?.shippingMethod ?? "",
+  );
+  const [carrierAccountNum, setCarrierAccountNum] = useState(
+    initialValues?.carrierAccountNum ?? "",
+  );
+  const [carrierAccountError, setCarrierAccountError] = useState(false);
+  const carrierAccountFieldRef = useRef<HTMLDivElement>(null);
   const [country, setCountry] = useState("us");
   const [taxable, setTaxable] = useState<"yes" | "no">("no");
   const showCarrierAccount = CARRIER_METHODS.includes(shippingMethod);
   const isCanada = country === "ca";
+
+  function handleSubmit() {
+    if (showCarrierAccount && !carrierAccountNum.trim()) {
+      setCarrierAccountError(true);
+      carrierAccountFieldRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    setCarrierAccountError(false);
+    onSubmit({
+      shippingMethod,
+      carrierAccountNum: showCarrierAccount ? carrierAccountNum.trim() : "",
+    });
+  }
   return (
     <div className={s.caForm}>
       <div className={s.caField}>
@@ -121,9 +159,26 @@ function AddrForm({
         </select>
       </div>
       {showCarrierAccount && (
-        <div className={s.caField}>
+        <div className={s.caField} ref={carrierAccountFieldRef}>
           <label className={s.caLabel}>Carrier Account Number</label>
-          <input className={s.caInput} placeholder="e.g. 000012" />
+          <input
+            className={[
+              s.caInput,
+              carrierAccountError ? s.caInputError : "",
+            ].join(" ")}
+            placeholder="e.g. 000012"
+            value={carrierAccountNum}
+            onChange={(e) => {
+              setCarrierAccountNum(e.target.value);
+              if (carrierAccountError) setCarrierAccountError(false);
+            }}
+          />
+          {carrierAccountError && (
+            <div className={s.caErrorRow}>
+              <span className={s.caErrorIcon}>!</span>
+              Carrier Account Number is required
+            </div>
+          )}
         </div>
       )}
       {isCanada && (
@@ -193,7 +248,7 @@ function AddrForm({
         <button onClick={onCancel} className={s.modalCancelBtn}>
           Cancel
         </button>
-        <button onClick={onSubmit} className={s.modalSaveBtn}>
+        <button onClick={handleSubmit} className={s.modalSaveBtn}>
           {submitLabel}
         </button>
       </div>
@@ -205,10 +260,16 @@ function ChangeAddressModal({
   onClose,
   onSelect,
   currentAddr,
+  carrierMethod,
+  carrierAccountNum,
+  onSaveCarrierAccount,
 }: {
   onClose: () => void;
   onSelect: (name: string, addr: string) => void;
   currentAddr: { name: string; addr: string };
+  carrierMethod: string;
+  carrierAccountNum: string;
+  onSaveCarrierAccount: (method: string, account: string) => void;
 }) {
   const [view, setView] = useState<ChangeAddrView>("select");
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
@@ -448,9 +509,12 @@ function ChangeAddressModal({
                 city: "Morton Grove",
                 zip: "60053",
                 phone: "(847) 555-1234",
+                shippingMethod: carrierMethod,
+                carrierAccountNum: carrierAccountNum,
               }}
               submitLabel="Save & Use Address"
-              onSubmit={() => {
+              onSubmit={(data) => {
+                onSaveCarrierAccount(data.shippingMethod, data.carrierAccountNum);
                 onClose();
               }}
               onCancel={() => setView("select")}
@@ -550,10 +614,14 @@ function Panel1Content({
   onNext,
   onChangeAddress,
   selectedAddr,
+  carrierMethod,
+  carrierAccountNum,
 }: {
   onNext: () => void;
   onChangeAddress: () => void;
   selectedAddr: { name: string; addr: string; phone: string };
+  carrierMethod: string;
+  carrierAccountNum: string;
 }) {
   return (
     <div className={s.panel1Content}>
@@ -584,13 +652,13 @@ function Panel1Content({
                 <span className={s.addrCardMetaBold}>
                   Carrier Account Number:
                 </span>{" "}
-                ** 0012
+                {carrierAccountNum ? maskAccount(carrierAccountNum) : "—"}
               </div>
               <div className={s.addrCardMetaDivider}>
                 <span className={s.addrCardMetaBold}>
                   Default Shipping Method:
                 </span>{" "}
-                UPS Third Party Billing
+                {METHOD_LABELS[carrierMethod] ?? "—"}
               </div>
               <div className={s.addrCardFieldRow}>
                 <label className={s.addrCardFieldLabel}>Department:</label>
@@ -646,7 +714,7 @@ function Panel2Content({
     "complete",
   );
   const [shippingType, setShippingType] = useState<"billed" | "prepaid">(
-    "billed",
+    defaultCarrierMethod === "prepaid" ? "prepaid" : "billed",
   );
   const [speedMethod, setSpeedMethod] = useState("ground");
   const [savedAccount, setSavedAccount] = useState<{
@@ -657,26 +725,17 @@ function Panel2Content({
       ? { method: defaultCarrierMethod, account: defaultAccountNumber }
       : null,
   );
-  // accountForm: null = closed, "add" = adding new, "edit" = editing existing
-  const [accountForm, setAccountForm] = useState<"add" | "edit" | null>(null);
+  // accountForm: null = showing saved pill (or add form if no saved account yet), "edit" = editing existing
+  const [accountForm, setAccountForm] = useState<"edit" | null>(null);
   const [formCarrier, setFormCarrier] = useState("");
   const [formAccountNum, setFormAccountNum] = useState("");
+  const [carrierSelectError, setCarrierSelectError] = useState(false);
+  const [accountNumError, setAccountNumError] = useState(false);
 
   function carrierBadgeFor(method: string) {
     if (method.startsWith("fedex")) return "fedex";
     if (method.startsWith("ups")) return "ups";
     return null;
-  }
-
-  function maskAccount(acct: string) {
-    if (acct.length <= 4) return acct;
-    return "*".repeat(acct.length - 4) + acct.slice(-4);
-  }
-
-  function openAdd() {
-    setFormCarrier("");
-    setFormAccountNum("");
-    setAccountForm("add");
   }
 
   function openEdit() {
@@ -687,10 +746,30 @@ function Panel2Content({
     }
   }
 
+  function clearAccountErrors() {
+    setCarrierSelectError(false);
+    setAccountNumError(false);
+  }
+
   function cancelForm() {
-    setAccountForm(null);
-    setFormCarrier("");
-    setFormAccountNum("");
+    if (savedAccount) {
+      setAccountForm(null);
+      setFormCarrier("");
+      setFormAccountNum("");
+      clearAccountErrors();
+      return;
+    }
+    if (!formCarrier) {
+      setCarrierSelectError(true);
+      setAccountNumError(false);
+      return;
+    }
+    if (!formAccountNum.trim()) {
+      setAccountNumError(true);
+      setCarrierSelectError(false);
+      return;
+    }
+    clearAccountErrors();
   }
 
   function saveForm() {
@@ -698,10 +777,33 @@ function Panel2Content({
       const saved = { method: formCarrier, account: formAccountNum.trim() };
       setSavedAccount(saved);
       onAccountChange(saved.method, saved.account);
+      setAccountForm(null);
+      setFormCarrier("");
+      setFormAccountNum("");
+      clearAccountErrors();
     }
-    setAccountForm(null);
-    setFormCarrier("");
-    setFormAccountNum("");
+  }
+
+  function handleNext() {
+    if (shippingType === "billed" && !savedAccount) {
+      if (!formCarrier) {
+        setCarrierSelectError(true);
+        setAccountNumError(false);
+        return;
+      }
+      if (!formAccountNum.trim()) {
+        setAccountNumError(true);
+        setCarrierSelectError(false);
+        return;
+      }
+      const saved = { method: formCarrier, account: formAccountNum.trim() };
+      setSavedAccount(saved);
+      onAccountChange(saved.method, saved.account);
+      setFormCarrier("");
+      setFormAccountNum("");
+    }
+    clearAccountErrors();
+    onNext();
   }
   return (
     <div className={s.panel2Content}>
@@ -800,6 +902,7 @@ function Panel2Content({
                   onClick={() => {
                     setShippingType("prepaid");
                     setAccountForm(null);
+                    clearAccountErrors();
                   }}
                   className={[
                     s.shippingToggleBtn,
@@ -812,6 +915,7 @@ function Panel2Content({
                   onClick={() => {
                     setShippingType("billed");
                     setAccountForm(null);
+                    clearAccountErrors();
                   }}
                   className={[
                     s.shippingToggleBtn,
@@ -837,18 +941,30 @@ function Panel2Content({
 
               {/* Carrier account area — only on Carrier Account tab */}
               {shippingType === "billed" &&
-                (accountForm !== null ? (
+                (accountForm === "edit" || !savedAccount ? (
                   /* Add / Edit form */
                   <>
                     <p className={s.carrierFormTitle}>
                       {accountForm === "edit"
                         ? "Edit carrier account"
                         : "Add carrier account"}
+                      {!savedAccount && (
+                        <span className={s.carrierFormRequired}>
+                          {" "}
+                          (required)
+                        </span>
+                      )}
                     </p>
                     <select
                       value={formCarrier}
-                      onChange={(e) => setFormCarrier(e.target.value)}
-                      className={s.shippingSelect}
+                      onChange={(e) => {
+                        setFormCarrier(e.target.value);
+                        if (carrierSelectError) setCarrierSelectError(false);
+                      }}
+                      className={[
+                        s.shippingSelect,
+                        carrierSelectError ? s.caInputError : "",
+                      ].join(" ")}
                     >
                       <option value="">--Select carrier--</option>
                       <option value="ups-collect">UPS Collect</option>
@@ -862,13 +978,34 @@ function Panel2Content({
                         FedEx Third Party Billing
                       </option>
                     </select>
+                    {carrierSelectError && (
+                      <div className={s.caErrorRow}>
+                        <span className={s.caErrorIcon}>!</span>
+                        Please add a carrier account or switch to Prepaid
+                        Shipping to continue.
+                      </div>
+                    )}
                     {formCarrier && (
-                      <input
-                        value={formAccountNum}
-                        onChange={(e) => setFormAccountNum(e.target.value)}
-                        className={s.carrierAccountInput}
-                        placeholder="Enter account number"
-                      />
+                      <>
+                        <input
+                          value={formAccountNum}
+                          onChange={(e) => {
+                            setFormAccountNum(e.target.value);
+                            if (accountNumError) setAccountNumError(false);
+                          }}
+                          className={[
+                            s.carrierAccountInput,
+                            accountNumError ? s.caInputError : "",
+                          ].join(" ")}
+                          placeholder="Enter account number"
+                        />
+                        {accountNumError && (
+                          <div className={s.caErrorRow}>
+                            <span className={s.caErrorIcon}>!</span>
+                            Please enter an account number
+                          </div>
+                        )}
+                      </>
                     )}
                     <div className={s.carrierCtaRow}>
                       <button
@@ -886,7 +1023,7 @@ function Panel2Content({
                       </button>
                     </div>
                   </>
-                ) : savedAccount ? (
+                ) : (
                   /* Saved account pill */
                   <div className={s.carrierPill}>
                     {carrierBadgeFor(savedAccount.method) === "fedex" ? (
@@ -920,28 +1057,19 @@ function Panel2Content({
                       Edit
                     </button>
                   </div>
-                ) : (
-                  /* No account yet */
-                  <button onClick={openAdd} className={s.accountAddBtn}>
-                    <svg
-                      viewBox="0 0 9.55566 10"
-                      className={s.accountAddIcon}
-                      fill="none"
-                    >
-                      <path
-                        d="M5.19434 0C5.26841 0 5.30566 0.0372541 5.30566 0.111328V4.47266H9.44434C9.51829 4.47266 9.55555 4.50917 9.55566 4.58301V5.41699C9.55556 5.49087 9.51831 5.52734 9.44434 5.52734H5.30566V9.88867C5.30566 9.96275 5.26841 10 5.19434 10H4.36133C4.28732 9.99997 4.25 9.96271 4.25 9.88867V5.52734H0.111328C0.0375344 5.52725 9.90012e-05 5.49078 0 5.41699V4.58301C0.000117105 4.50926 0.0375525 4.47275 0.111328 4.47266H4.25V0.111328C4.25 0.0372865 4.28732 3.2414e-05 4.36133 0H5.19434Z"
-                        fill="#004BB1"
-                      />
-                    </svg>
-                    <span className={s.accountAddText}>
-                      Add carrier account
-                    </span>
-                  </button>
                 ))}
             </div>
           </div>
         </div>
       </div>
+
+      <div className={`${s.panel2Footer} ${s.panel2FooterTop}`}>
+        <button className={s.backBtn}>← Previous Step</button>
+        <button onClick={handleNext} className={s.nextBtn}>
+          Next Step: Payment Method →
+        </button>
+      </div>
+
       {fulfillment === "split" ? (
         <>
           <PackageTable
@@ -1048,7 +1176,7 @@ function Panel2Content({
       )}
       <div className={s.panel2Footer}>
         <button className={s.backBtn}>← Previous Step</button>
-        <button onClick={onNext} className={s.nextBtn}>
+        <button onClick={handleNext} className={s.nextBtn}>
           Next Step: Payment Method →
         </button>
       </div>
@@ -1728,6 +1856,12 @@ export default function CheckoutPage() {
             setSelectedAddr({ name, addr, phone: "1-800-681-7475" })
           }
           currentAddr={{ name: selectedAddr.name, addr: selectedAddr.addr }}
+          carrierMethod={addressCarrierMethod}
+          carrierAccountNum={addressAccountNumber}
+          onSaveCarrierAccount={(method, account) => {
+            setAddressCarrierMethod(method);
+            setAddressAccountNumber(account);
+          }}
         />
       )}
       <div className={s.header}>
@@ -1795,6 +1929,8 @@ export default function CheckoutPage() {
                 onNext={() => advanceTo(2, 1)}
                 onChangeAddress={() => setModal("change")}
                 selectedAddr={selectedAddr}
+                carrierMethod={addressCarrierMethod}
+                carrierAccountNum={addressAccountNumber}
               />
             )}
           </div>

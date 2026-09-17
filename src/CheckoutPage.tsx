@@ -1,7 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import svgPaths from "../imports/svg-otyv9vxe4n";
 import svgPathsAac from "../imports/svg-aacepbrbow";
 import svgPathsGol from "../imports/svg-gol9aevr63";
+import imgB6000ZZ from "./imports/Step2/B6000ZZ.jpg";
+import imgBCAS32 from "./imports/Step2/BCAS32.jpg";
+import imgMFB2510 from "./imports/Step2/MFB25-10.jpg";
 import s from "./styles/checkout.module.scss";
 
 type ModalType = "change" | null;
@@ -13,7 +16,7 @@ const CARRIER_METHODS = [
   "fedex-third-party",
 ];
 
-type ChangeAddrView = "select" | "edit" | "add";
+type ChangeAddrView = "select" | "edit" | "add" | "remove";
 
 const METHOD_LABELS: Record<string, string> = {
   prepaid: "Prepaid",
@@ -28,6 +31,291 @@ function maskAccount(acct: string) {
   return "*".repeat(acct.length - 4) + acct.slice(-4);
 }
 
+type SavedAddress = {
+  id: number;
+  name: string;
+  addr: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  phone: string;
+  country: "us" | "ca";
+  recentValue: number;
+  isPreferred: boolean;
+};
+
+type AddrFormData = {
+  company: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  phone: string;
+  country: "us" | "ca";
+  shippingMethod: string;
+  carrierAccountNum: string;
+  isPreferred: boolean;
+};
+
+function formatAddr(f: {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: "us" | "ca";
+}) {
+  const stateLabels: Record<string, string> = { il: "IL", ca: "CA", ny: "NY" };
+  const stateLabel = f.state
+    ? stateLabels[f.state] ?? f.state.toUpperCase()
+    : "";
+  const line2 = [f.city, [stateLabel, f.zip].filter(Boolean).join(" ")]
+    .filter(Boolean)
+    .join(", ");
+  const line3 = f.country === "ca" ? "Canada" : "USA";
+  return [f.street, line2, line3].filter(Boolean).join("\n");
+}
+
+function buildSeedAddresses(
+  currentAddr: { name: string; addr: string } | null,
+): SavedAddress[] {
+  if (!currentAddr) return [];
+  const day = 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const recentFor = (maxDays: number) =>
+    now - Math.floor(Math.random() * maxDays) * day;
+  return [
+    {
+      id: 1,
+      name: currentAddr.name,
+      addr: currentAddr.addr,
+      street: "1475 E Woodfield Rd. Ste 1300",
+      city: "Schaumburg",
+      state: "il",
+      zip: "60173-5482",
+      phone: "1-800-681-7475",
+      country: "us",
+      recentValue: recentFor(3),
+      isPreferred: true,
+    },
+    {
+      id: 2,
+      name: "MISUMI Warehouse B",
+      addr: "2500 Enterprise Pkwy\nChicago, IL 60666\nUSA",
+      street: "2500 Enterprise Pkwy",
+      city: "Chicago",
+      state: "il",
+      zip: "60666",
+      phone: "1-800-681-7475",
+      country: "us",
+      recentValue: recentFor(60),
+      isPreferred: false,
+    },
+    {
+      id: 3,
+      name: "MISUMI Assembly Plant",
+      addr: "1020 Meacham Rd\nSchaumburg, IL 60173\nUSA",
+      street: "1020 Meacham Rd",
+      city: "Schaumburg",
+      state: "il",
+      zip: "60173",
+      phone: "1-800-681-7475",
+      country: "us",
+      recentValue: recentFor(60),
+      isPreferred: false,
+    },
+    {
+      id: 4,
+      name: "Torrance Distribution Center",
+      addr: "2515 Columbia St\nTorrance, CA 90503\nUSA",
+      street: "2515 Columbia St",
+      city: "Torrance",
+      state: "ca",
+      zip: "90503",
+      phone: "1-800-681-7475",
+      country: "us",
+      recentValue: recentFor(60),
+      isPreferred: false,
+    },
+    {
+      id: 5,
+      name: "Home",
+      addr: "482 Maple Grove Ln\nSan Jose, CA 95123\nUSA",
+      street: "482 Maple Grove Ln",
+      city: "San Jose",
+      state: "ca",
+      zip: "95123",
+      phone: "(408) 555-9821",
+      country: "us",
+      recentValue: recentFor(60),
+      isPreferred: false,
+    },
+    {
+      id: 6,
+      name: "MISUMI NY Office",
+      addr: "111 W 33rd St\nNew York, NY 10120\nUSA",
+      street: "111 W 33rd St",
+      city: "New York",
+      state: "ny",
+      zip: "10120",
+      phone: "1-800-681-7475",
+      country: "us",
+      recentValue: recentFor(60),
+      isPreferred: false,
+    },
+    {
+      id: 7,
+      name: "MISUMI Canada Ltd",
+      addr: "6395 Kestrel Rd\nMississauga, ON L5T 1Z5\nCanada",
+      street: "6395 Kestrel Rd",
+      city: "Mississauga",
+      state: "",
+      zip: "L5T 1Z5",
+      phone: "1-800-681-7475",
+      country: "ca",
+      recentValue: recentFor(60),
+      isPreferred: false,
+    },
+  ];
+}
+
+function PreferredAddressInfoIcon() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        className={s.caInfoIcon}
+        aria-label="About preferred address"
+      >
+        i
+      </button>
+      {open && (
+        <div
+          className={[s.modalOverlay, s.caInfoOverlay].join(" ")}
+          onClick={() => setOpen(false)}
+        >
+          <div className={s.caInfoModal} onClick={(e) => e.stopPropagation()}>
+            <div className={s.caInfoModalHeader}>
+              <span className={s.modalTitle}>About preferred address</span>
+              <button
+                onClick={() => setOpen(false)}
+                className={s.modalCloseBtn}
+              >
+                ×
+              </button>
+            </div>
+            <div className={s.caInfoModalBody}>
+              <p>
+                Your preferred address is saved to your account and will be
+                preselected for future orders.
+              </p>
+              <p>
+                You can still choose a different address for this order
+                without changing your preferred address.
+              </p>
+            </div>
+            <div className={s.caInfoModalFooter}>
+              <button onClick={() => setOpen(false)} className={s.caInfoGotIt}>
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function IconEditButton({
+  onClick,
+}: {
+  onClick: (e: React.MouseEvent) => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={s.caIconBtn}
+      aria-label="Edit address"
+      type="button"
+    >
+      <svg fill="none" viewBox="0 0 14 14" style={{ width: 14, height: 14 }}>
+        <path
+          d={svgPaths.p1c2f1080}
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.16667"
+        />
+      </svg>
+    </button>
+  );
+}
+
+function IconDeleteButton({
+  onClick,
+}: {
+  onClick: (e: React.MouseEvent) => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={[s.caIconBtn, s.caIconBtnDelete].join(" ")}
+      aria-label="Delete address"
+      type="button"
+    >
+      <svg fill="none" viewBox="0 0 24 24" style={{ width: 14, height: 14 }}>
+        <path
+          d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14ZM10 11v6M14 11v6"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
+      </svg>
+    </button>
+  );
+}
+
+function ArrowIcon({
+  direction,
+  color = "currentColor",
+}: {
+  direction: "left" | "right";
+  color?: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      style={{ width: 14, height: 14, flexShrink: 0 }}
+    >
+      {direction === "right" ? (
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke={color}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <path
+          d="M13 8H3M7 4L3 8l4 4"
+          stroke={color}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+    </svg>
+  );
+}
+
 function AddrForm({
   initialValues,
   submitLabel,
@@ -38,15 +326,27 @@ function AddrForm({
     company?: string;
     street?: string;
     city?: string;
+    state?: string;
     zip?: string;
     phone?: string;
+    country?: "us" | "ca";
     shippingMethod?: string;
     carrierAccountNum?: string;
+    isPreferred?: boolean;
   };
   submitLabel: string;
-  onSubmit: (data: { shippingMethod: string; carrierAccountNum: string }) => void;
+  onSubmit: (data: AddrFormData) => void;
   onCancel: () => void;
 }) {
+  const [company, setCompany] = useState(initialValues?.company ?? "");
+  const [country, setCountry] = useState<"us" | "ca">(
+    initialValues?.country ?? "us",
+  );
+  const [street, setStreet] = useState(initialValues?.street ?? "");
+  const [city, setCity] = useState(initialValues?.city ?? "");
+  const [stateField, setStateField] = useState(initialValues?.state ?? "");
+  const [zip, setZip] = useState(initialValues?.zip ?? "");
+  const [phone, setPhone] = useState(initialValues?.phone ?? "");
   const [shippingMethod, setShippingMethod] = useState(
     initialValues?.shippingMethod ?? "",
   );
@@ -55,8 +355,10 @@ function AddrForm({
   );
   const [carrierAccountError, setCarrierAccountError] = useState(false);
   const carrierAccountFieldRef = useRef<HTMLDivElement>(null);
-  const [country, setCountry] = useState("us");
   const [taxable, setTaxable] = useState<"yes" | "no">("no");
+  const [isPreferred, setIsPreferred] = useState(
+    initialValues?.isPreferred ?? false,
+  );
   const showCarrierAccount = CARRIER_METHODS.includes(shippingMethod);
   const isCanada = country === "ca";
 
@@ -71,8 +373,16 @@ function AddrForm({
     }
     setCarrierAccountError(false);
     onSubmit({
+      company: company.trim(),
+      street: street.trim(),
+      city: city.trim(),
+      state: stateField,
+      zip: zip.trim(),
+      phone: phone.trim(),
+      country,
       shippingMethod,
       carrierAccountNum: showCarrierAccount ? carrierAccountNum.trim() : "",
+      isPreferred,
     });
   }
   return (
@@ -82,7 +392,8 @@ function AddrForm({
         <input
           className={s.caInput}
           placeholder="Company Name"
-          defaultValue={initialValues?.company ?? ""}
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
         />
       </div>
       <div className={s.caField}>
@@ -90,7 +401,7 @@ function AddrForm({
         <select
           className={s.caSelect}
           value={country}
-          onChange={(e) => setCountry(e.target.value)}
+          onChange={(e) => setCountry(e.target.value as "us" | "ca")}
         >
           <option value="us">United States</option>
           <option value="ca">Canada</option>
@@ -101,7 +412,8 @@ function AddrForm({
         <input
           className={s.caInput}
           placeholder="Street Address"
-          defaultValue={initialValues?.street ?? ""}
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
         />
       </div>
       <div className={s.caField}>
@@ -113,13 +425,18 @@ function AddrForm({
         <input
           className={s.caInput}
           placeholder="City"
-          defaultValue={initialValues?.city ?? ""}
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
         />
       </div>
       <div className={s.caFieldRow}>
         <div className={s.caFieldHalf}>
           <label className={s.caLabel}>State/Province</label>
-          <select className={s.caSelect}>
+          <select
+            className={s.caSelect}
+            value={stateField}
+            onChange={(e) => setStateField(e.target.value)}
+          >
             <option value="">Select state</option>
             <option value="il">Illinois (IL)</option>
             <option value="ca">California (CA)</option>
@@ -131,7 +448,8 @@ function AddrForm({
           <input
             className={s.caInput}
             placeholder="Example: 60173"
-            defaultValue={initialValues?.zip ?? ""}
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
           />
         </div>
       </div>
@@ -140,7 +458,8 @@ function AddrForm({
         <input
           className={s.caInput}
           placeholder="Example: 800-681-7475"
-          defaultValue={initialValues?.phone ?? ""}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
         />
       </div>
       <div className={s.caField}>
@@ -241,8 +560,16 @@ function AddrForm({
         <input className={s.caInputInline} placeholder="Example: John Smith" />
       </div>
       <label className={s.caPreferredRow}>
-        <input type="checkbox" className={s.caCheckbox} />
-        <span className={s.caCheckboxLabel}>Set as my preferred address</span>
+        <input
+          type="checkbox"
+          className={s.caCheckbox}
+          checked={isPreferred}
+          onChange={(e) => setIsPreferred(e.target.checked)}
+        />
+        <span className={s.caCheckboxLabel}>
+          Make this my preferred address
+        </span>
+        <PreferredAddressInfoIcon />
       </label>
       <div className={s.caFormFooter}>
         <button onClick={onCancel} className={s.modalCancelBtn}>
@@ -259,37 +586,123 @@ function AddrForm({
 function ChangeAddressModal({
   onClose,
   onSelect,
+  onClearAddress,
   currentAddr,
+  initialView = "select",
   carrierMethod,
   carrierAccountNum,
   onSaveCarrierAccount,
 }: {
   onClose: () => void;
   onSelect: (name: string, addr: string) => void;
-  currentAddr: { name: string; addr: string };
+  onClearAddress: () => void;
+  currentAddr: { name: string; addr: string } | null;
+  initialView?: "select" | "edit";
   carrierMethod: string;
   carrierAccountNum: string;
   onSaveCarrierAccount: (method: string, account: string) => void;
 }) {
-  const [view, setView] = useState<ChangeAddrView>("select");
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
-  const addresses = [
-    {
-      name: "MISUMI USA WOS+",
-      addr: "1475 E Woodfield Rd. Ste 1300, Schaumburg, IL 60173",
-      primary: true,
-    },
-    {
-      name: "MISUMI Warehouse B",
-      addr: "2500 Enterprise Pkwy, Chicago, IL 60666",
-      primary: false,
-    },
-    {
-      name: "MISUMI Assembly Plant",
-      addr: "1020 Meacham Rd, Schaumburg, IL 60173",
-      primary: false,
-    },
-  ];
+  const [view, setView] = useState<ChangeAddrView>(
+    !currentAddr ? "add" : initialView,
+  );
+  const [addresses, setAddresses] = useState<SavedAddress[]>(() =>
+    buildSeedAddresses(currentAddr),
+  );
+  const [selectedId, setSelectedId] = useState(1);
+  const [pendingId, setPendingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(
+    currentAddr && initialView === "edit" ? 1 : null,
+  );
+  const [removingId, setRemovingId] = useState<number | null>(null);
+  const [sortOrder, setSortOrder] = useState<"recent" | "oldest">("recent");
+  const [sortMenuOpen, setSortMenuOpen] = useState(false);
+  const sortMenuRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (!sortMenuOpen) return;
+    function handleOutsideClick(e: MouseEvent) {
+      if (
+        sortMenuRef.current &&
+        !sortMenuRef.current.contains(e.target as Node)
+      ) {
+        setSortMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [sortMenuOpen]);
+
+  const selectedAddress = addresses.find((a) => a.id === selectedId) ?? null;
+  const editingAddress = addresses.find((a) => a.id === editingId) ?? null;
+  const removingAddress = addresses.find((a) => a.id === removingId) ?? null;
+  const showSearch = addresses.length >= 5;
+
+  const savedList = addresses
+    .filter((a) => a.id !== selectedId)
+    .filter((a) =>
+      searchQuery.trim()
+        ? (a.name + " " + a.addr)
+            .toLowerCase()
+            .includes(searchQuery.trim().toLowerCase())
+        : true,
+    )
+    .sort((a, b) =>
+      sortOrder === "recent"
+        ? b.recentValue - a.recentValue
+        : a.recentValue - b.recentValue,
+    );
+
+  function togglePreferred(id: number) {
+    setAddresses((prev) =>
+      prev.map((a) => ({ ...a, isPreferred: a.id === id })),
+    );
+  }
+
+  function selectAddress(addr: SavedAddress) {
+    setSelectedId(addr.id);
+    setPendingId(null);
+    onSelect(addr.name, addr.addr);
+    onSaveCarrierAccount("", "");
+  }
+
+  function confirmUseAddress() {
+    if (pendingId === null) return;
+    const addr = addresses.find((a) => a.id === pendingId);
+    if (addr) selectAddress(addr);
+    onClose();
+  }
+
+  function openEditFor(id: number) {
+    setEditingId(id);
+    setView("edit");
+  }
+
+  function openRemoveFor(id: number) {
+    setRemovingId(id);
+    setView("remove");
+  }
+
+  function handleRemoveConfirm() {
+    if (removingId === null) return;
+    const remaining = addresses.filter((a) => a.id !== removingId);
+    if (remaining.length === 0) {
+      setAddresses([]);
+      setRemovingId(null);
+      onClearAddress();
+      setView("add");
+      return;
+    }
+    if (removingId === selectedId) {
+      const next = remaining.find((a) => a.isPreferred) ?? remaining[0];
+      setSelectedId(next.id);
+      onSelect(next.name, next.addr);
+      onSaveCarrierAccount("", "");
+    }
+    setAddresses(remaining);
+    setRemovingId(null);
+    setView("select");
+  }
 
   return (
     <div className={s.modalOverlay}>
@@ -306,218 +719,322 @@ function ChangeAddressModal({
         {view === "select" && (
           <div className={s.caBody}>
             <div className={s.caSection}>
-              <p className={s.caSectionTitle}>Current address</p>
-              <div className={s.caCurrentCard}>
-                <div className={s.caCurrentCardRadio}>
-                  <div className={s.caRadioFilled}>
-                    <div className={s.caRadioFilledDot} />
-                  </div>
-                </div>
-                <div className={s.caCurrentCardInfo}>
-                  <div className={s.caCurrentName}>{currentAddr.name}</div>
-                  <div className={s.caCurrentAddr}>{currentAddr.addr}</div>
-                  <div className={s.caCurrentBadges}>
-                    <span className={s.caCurrentBadge}>
-                      <svg
-                        fill="none"
-                        viewBox="0 0 12 12"
-                        style={{ width: 11, height: 11 }}
-                      >
-                        <path
-                          d="M2 6l3 3 5-5"
-                          stroke="#16a34a"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      Shipping
-                    </span>
-                  </div>
-                </div>
+              <div className={s.caSelectedHeaderRow}>
+                <p className={s.caSectionTitle}>
+                  Selected address (for this order)
+                </p>
                 <button
-                  onClick={() => setView("edit")}
-                  className={s.caEditLink}
+                  onClick={() => setView("add")}
+                  className={s.caAddLink}
                 >
                   <svg
+                    className={s.caAddLinkIcon}
                     fill="none"
                     viewBox="0 0 14 14"
-                    style={{ width: 13, height: 13 }}
                   >
                     <path
-                      d={svgPaths.p1c2f1080}
+                      d="M7 2.33333V11.6667M11.6667 7H2.33333"
                       stroke="#0062BD"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="1.16667"
+                      strokeWidth="1.45833"
                     />
                   </svg>
-                  Edit
+                  Add new address
                 </button>
               </div>
-            </div>
-
-            <div className={s.caSection}>
-              <div className={s.caSavedHeader}>
-                <p className={s.caSectionTitle}>
-                  Saved addresses ({addresses.length})
-                </p>
-                <button onClick={() => setView("add")} className={s.caAddLink}>
-                  + Add new address
-                </button>
-              </div>
-              <div className={s.caSearchRow}>
-                <div className={s.caSearchWrap}>
-                  <svg
-                    className={s.caSearchIcon}
-                    fill="none"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d={svgPathsAac.p2aa1a600}
-                      stroke="#9CA3AF"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.33333"
-                    />
-                  </svg>
-                  <input
-                    className={s.caSearchInput}
-                    placeholder="Search your saved addresses..."
-                  />
-                </div>
-                <button className={s.caSearchBtn}>Search</button>
-              </div>
-              <div className={s.caSavedList}>
-                {addresses.map((a, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setSelectedIdx(i)}
-                    className={[
-                      s.caSavedItem,
-                      selectedIdx === i ? s.caSavedItemSelected : "",
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        s.caSavedRadio,
-                        selectedIdx === i ? s.caSavedRadioActive : "",
-                      ].join(" ")}
-                    >
-                      {selectedIdx === i && (
-                        <div className={s.caSavedRadioDot} />
+              {selectedAddress && (
+                <div className={s.caCurrentCard}>
+                  <div className={s.caCurrentCardTopRow}>
+                    <div className={s.caCurrentCardRadio}>
+                      <div className={s.caRadioFilled}>
+                        <div className={s.caRadioFilledDot} />
+                      </div>
+                    </div>
+                    <div className={s.caCurrentNameRow}>
+                      <span className={s.caCurrentName}>
+                        {selectedAddress.name}
+                      </span>
+                      {selectedAddress.isPreferred && (
+                        <span className={s.caSavedPrimary}>Preferred</span>
                       )}
                     </div>
-                    <div className={s.caSavedInfo}>
-                      <div className={s.caSavedNameRow}>
-                        <span className={s.caSavedName}>{a.name}</span>
-                        {a.primary && (
-                          <span className={s.caSavedPrimary}>Primary</span>
-                        )}
-                      </div>
-                      <div className={s.caSavedAddr}>{a.addr}</div>
+                    <div className={s.caCardTopActions}>
+                      <IconEditButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditFor(selectedAddress.id);
+                        }}
+                      />
+                      <IconDeleteButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openRemoveFor(selectedAddress.id);
+                        }}
+                      />
                     </div>
-                    <button
-                      className={s.caUseAddrBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelect(a.name, a.addr);
-                        onClose();
-                      }}
-                    >
-                      Use this address
-                    </button>
                   </div>
-                ))}
-              </div>
+                  <div className={s.caCurrentCardBody}>
+                    <div className={s.caCurrentAddr}>
+                      {selectedAddress.addr}
+                    </div>
+                    {!selectedAddress.isPreferred && (
+                      <label className={s.caPreferredRow}>
+                        <input
+                          type="checkbox"
+                          className={s.caCheckbox}
+                          checked={false}
+                          onChange={() => togglePreferred(selectedAddress.id)}
+                        />
+                        <span className={s.caCheckboxLabel}>
+                          Make this my preferred address
+                        </span>
+                        <PreferredAddressInfoIcon />
+                      </label>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <label className={s.caPreferredRow}>
-              <input type="checkbox" className={s.caCheckbox} />
-              <span className={s.caCheckboxLabel}>
-                Set as my preferred address
-              </span>
-            </label>
+            {addresses.length > 1 && (
+              <div className={s.caSection}>
+                <div className={s.caSavedHeader}>
+                  <p className={s.caSectionTitle}>
+                    Saved addresses ({savedList.length})
+                  </p>
+                  <span className={s.caSavedHeaderDivider}>|</span>
+                  <div className={s.caSortRow}>
+                    <span className={s.caSortLabel}>Sort by</span>
+                    <div className={s.caSortDropdown} ref={sortMenuRef}>
+                      <button
+                        type="button"
+                        className={s.caSortTrigger}
+                        onClick={() => setSortMenuOpen((open) => !open)}
+                      >
+                        {sortOrder === "recent" ? "Most recent" : "Least recent"}
+                        <svg
+                          className={s.caSortTriggerIcon}
+                          viewBox="0 0 10 6"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 1l4 4 4-4"
+                            stroke="#0062bd"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      {sortMenuOpen && (
+                        <div className={s.caSortMenu}>
+                          <button
+                            type="button"
+                            className={[
+                              s.caSortMenuItem,
+                              sortOrder === "recent"
+                                ? s.caSortMenuItemActive
+                                : "",
+                            ].join(" ")}
+                            onClick={() => {
+                              setSortOrder("recent");
+                              setSortMenuOpen(false);
+                            }}
+                          >
+                            Most recent
+                          </button>
+                          <button
+                            type="button"
+                            className={[
+                              s.caSortMenuItem,
+                              sortOrder === "oldest"
+                                ? s.caSortMenuItemActive
+                                : "",
+                            ].join(" ")}
+                            onClick={() => {
+                              setSortOrder("oldest");
+                              setSortMenuOpen(false);
+                            }}
+                          >
+                            Least recent
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {showSearch && (
+                  <div className={s.caSearchRow}>
+                    <div className={s.caSearchWrap}>
+                      <svg
+                        className={s.caSearchIcon}
+                        fill="none"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d={svgPathsAac.p2aa1a600}
+                          stroke="#9CA3AF"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1.33333"
+                        />
+                      </svg>
+                      <input
+                        className={s.caSearchInput}
+                        placeholder="Search your saved addresses..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                    </div>
+                    <button className={s.caSearchBtn}>Search</button>
+                  </div>
+                )}
+                <div
+                  className={[
+                    s.caSavedList,
+                    showSearch ? s.caSavedListScroll : "",
+                  ].join(" ")}
+                >
+                  {savedList.map((a) => (
+                    <div
+                      key={a.id}
+                      onClick={() => setPendingId(a.id)}
+                      className={[
+                        s.caSavedItem,
+                        pendingId === a.id ? s.caSavedItemSelected : "",
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          s.caSavedRadio,
+                          pendingId === a.id ? s.caSavedRadioActive : "",
+                        ].join(" ")}
+                      >
+                        {pendingId === a.id && (
+                          <div className={s.caSavedRadioDot} />
+                        )}
+                      </div>
+                      <div className={s.caSavedInfo}>
+                        <div className={s.caSavedNameRow}>
+                          <span className={s.caSavedName}>{a.name}</span>
+                          {a.isPreferred && (
+                            <span className={s.caSavedPrimary}>
+                              Preferred
+                            </span>
+                          )}
+                        </div>
+                        <div className={s.caSavedAddr}>{a.addr}</div>
+                      </div>
+                      <div className={s.caCardTopActions}>
+                        <IconEditButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEditFor(a.id);
+                          }}
+                        />
+                        <IconDeleteButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openRemoveFor(a.id);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className={s.caFormFooter}>
               <button onClick={onClose} className={s.modalCancelBtn}>
-                Cancel
+                {addresses.length === 1 ? "Close" : "Cancel"}
               </button>
-              <button
-                onClick={() => {
-                  if (selectedIdx !== null) {
-                    onSelect(
-                      addresses[selectedIdx].name,
-                      addresses[selectedIdx].addr,
-                    );
-                    onClose();
-                  }
-                }}
-                className={s.modalSaveBtn}
-                disabled={selectedIdx === null}
-              >
-                Save &amp; Use Address
-              </button>
+              {addresses.length > 1 && (
+                <button
+                  onClick={confirmUseAddress}
+                  className={s.modalSaveBtn}
+                  disabled={pendingId === null}
+                >
+                  Use This Address
+                </button>
+              )}
             </div>
           </div>
         )}
 
-        {/* View: Edit current */}
-        {view === "edit" && (
+        {/* View: Edit existing */}
+        {view === "edit" && editingAddress && (
           <div className={s.caBody}>
-            <div className={s.caSection}>
-              <p className={s.caSectionTitle}>Current address</p>
-              <div className={s.caCurrentCard}>
-                <div className={s.caCurrentCardRadio}>
-                  <div className={s.caRadioFilled}>
-                    <div className={s.caRadioFilledDot} />
-                  </div>
-                </div>
-                <div className={s.caCurrentCardInfo}>
-                  <div className={s.caCurrentName}>{currentAddr.name}</div>
-                  <div className={s.caCurrentAddr}>{currentAddr.addr}</div>
-                  <div className={s.caCurrentBadges}>
-                    <span className={s.caCurrentBadge}>
-                      <svg
-                        fill="none"
-                        viewBox="0 0 12 12"
-                        style={{ width: 11, height: 11 }}
-                      >
-                        <path
-                          d="M2 6l3 3 5-5"
-                          stroke="#16a34a"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      Shipping
-                    </span>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setView("select")}
-                  className={s.caCancelLink}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+            <button
+              onClick={() => {
+                setEditingId(null);
+                setView("select");
+              }}
+              className={s.caBackLink}
+            >
+              <ArrowIcon direction="left" color="#0062bd" />
+              Back to addresses
+            </button>
+            <h3 className={s.caAddTitle}>Edit address</h3>
             <AddrForm
               initialValues={{
-                company: currentAddr.name,
-                street: "7339 Davis Street",
-                city: "Morton Grove",
-                zip: "60053",
-                phone: "(847) 555-1234",
-                shippingMethod: carrierMethod,
-                carrierAccountNum: carrierAccountNum,
+                company: editingAddress.name,
+                street: editingAddress.street,
+                city: editingAddress.city,
+                state: editingAddress.state,
+                zip: editingAddress.zip,
+                phone: editingAddress.phone,
+                country: editingAddress.country,
+                shippingMethod:
+                  editingAddress.id === selectedId ? carrierMethod : "",
+                carrierAccountNum:
+                  editingAddress.id === selectedId ? carrierAccountNum : "",
+                isPreferred: editingAddress.isPreferred,
               }}
-              submitLabel="Save & Use Address"
+              submitLabel={
+                editingAddress.id === selectedId
+                  ? "Save & Use Address"
+                  : "Save Address"
+              }
               onSubmit={(data) => {
-                onSaveCarrierAccount(data.shippingMethod, data.carrierAccountNum);
-                onClose();
+                const updated: SavedAddress = {
+                  ...editingAddress,
+                  name: data.company || editingAddress.name,
+                  addr: formatAddr(data),
+                  street: data.street,
+                  city: data.city,
+                  state: data.state,
+                  zip: data.zip,
+                  phone: data.phone,
+                  country: data.country,
+                  isPreferred: data.isPreferred,
+                };
+                setAddresses((prev) =>
+                  prev.map((a) => {
+                    if (a.id === updated.id) return updated;
+                    return data.isPreferred
+                      ? { ...a, isPreferred: false }
+                      : a;
+                  }),
+                );
+                if (editingAddress.id === selectedId) {
+                  onSelect(updated.name, updated.addr);
+                  onSaveCarrierAccount(
+                    data.shippingMethod,
+                    data.carrierAccountNum,
+                  );
+                  setEditingId(null);
+                  onClose();
+                } else {
+                  setEditingId(null);
+                  setView("select");
+                }
               }}
-              onCancel={() => setView("select")}
+              onCancel={() => {
+                setEditingId(null);
+                setView("select");
+              }}
             />
           </div>
         )}
@@ -525,17 +1042,106 @@ function ChangeAddressModal({
         {/* View: Add new */}
         {view === "add" && (
           <div className={s.caBody}>
-            <button onClick={() => setView("select")} className={s.caBackLink}>
-              ← Back to saved addresses
+            <button
+              onClick={() => setView("select")}
+              className={s.caBackLink}
+            >
+              <ArrowIcon direction="left" color="#0062bd" />
+              Back to saved addresses
             </button>
             <h3 className={s.caAddTitle}>Add new address</h3>
+            {addresses.length === 0 && (
+              <div className={s.caErrorRow} style={{ marginBottom: 12 }}>
+                <span className={s.caErrorIcon}>!</span>
+                An address is required to continue.
+              </div>
+            )}
             <AddrForm
               submitLabel="Add Address"
-              onSubmit={() => {
-                onClose();
+              onSubmit={(data) => {
+                const wasEmpty = addresses.length === 0;
+                const newId =
+                  addresses.reduce((max, a) => Math.max(max, a.id), 0) + 1;
+                const newAddr: SavedAddress = {
+                  id: newId,
+                  name: data.company || "New Address",
+                  addr: formatAddr(data),
+                  street: data.street,
+                  city: data.city,
+                  state: data.state,
+                  zip: data.zip,
+                  phone: data.phone,
+                  country: data.country,
+                  recentValue: Date.now(),
+                  isPreferred: data.isPreferred || wasEmpty,
+                };
+                setAddresses((prev) => {
+                  const next = newAddr.isPreferred
+                    ? prev.map((a) => ({ ...a, isPreferred: false }))
+                    : prev;
+                  return [...next, newAddr];
+                });
+                if (wasEmpty) {
+                  setSelectedId(newAddr.id);
+                  onSelect(newAddr.name, newAddr.addr);
+                  onSaveCarrierAccount(
+                    data.shippingMethod,
+                    data.carrierAccountNum,
+                  );
+                  onClose();
+                } else {
+                  setView("select");
+                }
               }}
               onCancel={() => setView("select")}
             />
+          </div>
+        )}
+
+        {/* View: Remove confirmation */}
+        {view === "remove" && removingAddress && (
+          <div className={s.caBody}>
+            <div className={s.caRemoveWrap}>
+              <div className={s.caRemoveIconWrap}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style={{ width: 26, height: 26 }}
+                >
+                  <path
+                    d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14ZM10 11v6M14 11v6"
+                    stroke="#dd0000"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </div>
+              <p className={s.caRemoveTitle}>Remove this address?</p>
+              <div className={s.caCurrentName}>{removingAddress.name}</div>
+              <div className={s.caRemoveAddr}>{removingAddress.addr}</div>
+              <p className={s.caRemoveText}>
+                This address will be removed from your saved addresses. You
+                can always add it again later if needed.
+              </p>
+            </div>
+            <div className={s.caFormFooter}>
+              <button
+                onClick={() => {
+                  setRemovingId(null);
+                  setView("select");
+                }}
+                className={s.modalCancelBtn}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRemoveConfirm}
+                className={s.caRemoveConfirmBtn}
+              >
+                Remove Address
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -613,13 +1219,15 @@ function PanelHeader({
 function Panel1Content({
   onNext,
   onChangeAddress,
+  onEditAddress,
   selectedAddr,
   carrierMethod,
   carrierAccountNum,
 }: {
   onNext: () => void;
   onChangeAddress: () => void;
-  selectedAddr: { name: string; addr: string; phone: string };
+  onEditAddress: () => void;
+  selectedAddr: { name: string; addr: string; phone: string } | null;
   carrierMethod: string;
   carrierAccountNum: string;
 }) {
@@ -641,66 +1249,125 @@ function Panel1Content({
             Select New Address
           </button>
         </div>
-        <div className={s.addrCard}>
-          <div className={s.addrCardRow}>
-            <div className={s.addrCardColLeft}>
-              <div className={s.addrCardName}>{selectedAddr.name}</div>
-              {selectedAddr.addr.split("\n").map((line, i) => (
-                <div key={i} className={s.addrCardLine}>
-                  {line}
+        {selectedAddr ? (
+          <div className={s.addrCard}>
+            <div className={s.addrCardRow}>
+              <div className={s.addrCardColLeft}>
+                <div className={s.addrCardName}>{selectedAddr.name}</div>
+                {selectedAddr.addr.split("\n").map((line, i) => (
+                  <div key={i} className={s.addrCardLine}>
+                    {line}
+                  </div>
+                ))}
+                <div className={s.addrCardPhone}>
+                  <span className={s.addrCardPhoneLabel}>Phone</span>{" "}
+                  {selectedAddr.phone}
                 </div>
-              ))}
-              <div className={s.addrCardPhone}>
-                <span className={s.addrCardPhoneLabel}>Phone</span>{" "}
-                {selectedAddr.phone}
               </div>
-            </div>
-            <div className={s.addrCardColRight}>
-              <div className={s.addrCardMeta}>
-                <span className={s.addrCardMetaBold}>
-                  Carrier Account Number:
-                </span>{" "}
-                {carrierAccountNum ? maskAccount(carrierAccountNum) : "—"}
-              </div>
-              <div className={s.addrCardMetaDivider}>
-                <span className={s.addrCardMetaBold}>
-                  Default Shipping Method:
-                </span>{" "}
-                {METHOD_LABELS[carrierMethod] ?? "—"}
-              </div>
-              <div className={s.addrCardFieldRow}>
-                <label className={s.addrCardFieldLabel}>Department:</label>
-                <input
-                  className={s.addrCardInput}
-                  defaultValue="UPS Third Party Billing"
-                />
-              </div>
-              <div className={s.addrCardFieldRowMargin}>
-                <label className={s.addrCardFieldLabel}>Attention:</label>
-                <input className={s.addrCardInput} defaultValue="John Smith" />
-              </div>
-            </div>
-            <div className={s.addrCardActions}>
-              <button onClick={onChangeAddress} className={s.selectNewAddrBtn}>
-                <svg className={s.editBtnIcon} fill="none" viewBox="0 0 14 14">
-                  <path
-                    d={svgPaths.p1c2f1080}
-                    stroke="#0062BD"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.16667"
+              <div className={s.addrCardColRight}>
+                <div className={s.addrCardMeta}>
+                  <span className={s.addrCardMetaBold}>
+                    Carrier Account Number:
+                  </span>{" "}
+                  {carrierAccountNum ? maskAccount(carrierAccountNum) : "—"}
+                </div>
+                <div className={s.addrCardMetaDivider}>
+                  <span className={s.addrCardMetaBold}>
+                    Default Shipping Method:
+                  </span>{" "}
+                  {METHOD_LABELS[carrierMethod] ?? "—"}
+                </div>
+                <div className={s.addrCardFieldRow}>
+                  <label className={s.addrCardFieldLabel}>Department:</label>
+                  <input
+                    className={s.addrCardInput}
+                    defaultValue="UPS Third Party Billing"
                   />
-                </svg>{" "}
-                Edit
-              </button>
+                </div>
+                <div className={s.addrCardFieldRowMargin}>
+                  <label className={s.addrCardFieldLabel}>Attention:</label>
+                  <input
+                    className={s.addrCardInput}
+                    defaultValue="John Smith"
+                  />
+                </div>
+              </div>
+              <div className={s.addrCardActions}>
+                <button
+                  onClick={onEditAddress}
+                  className={s.selectNewAddrBtn}
+                >
+                  <svg
+                    className={s.editBtnIcon}
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      d={svgPaths.p1c2f1080}
+                      stroke="#0062BD"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.16667"
+                    />
+                  </svg>{" "}
+                  Edit
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className={s.addrEmptyCard}>
+            <div className={s.addrEmptyIconWrap}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                style={{ width: 26, height: 26 }}
+              >
+                <path
+                  d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"
+                  stroke="#5b7a99"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="12" cy="10" r="3" stroke="#5b7a99" strokeWidth="1.6" />
+              </svg>
+            </div>
+            <p className={s.addrEmptyTitle}>No shipping address selected</p>
+            <p className={s.addrEmptyText}>
+              You don't have any saved addresses. Please add a shipping
+              address to continue.
+            </p>
+            <button onClick={onChangeAddress} className={s.addrEmptyAddBtn}>
+              <svg viewBox="0 0 14 14" fill="none" style={{ width: 14, height: 14 }}>
+                <path
+                  d="M7 2.33333V11.6667M11.6667 7H2.33333"
+                  stroke="#fff"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.45833"
+                />
+              </svg>
+              Add Shipping Address
+            </button>
+          </div>
+        )}
       </div>
       <div className={s.panel1Footer}>
-        <button className={s.backBtn}>← Back to Cart</button>
-        <button onClick={onNext} className={s.nextBtn}>
-          Next Step: Shipping Options →
+        <button className={s.backBtn}>
+          <ArrowIcon direction="left" color="#333" />
+          Back to Cart
+        </button>
+        <button
+          onClick={selectedAddr ? onNext : undefined}
+          disabled={!selectedAddr}
+          className={[
+            s.nextBtn,
+            !selectedAddr ? s.nextBtnDisabled : "",
+          ].join(" ")}
+        >
+          Next Step: Shipping Options
+          <ArrowIcon direction="right" color="#fff" />
         </button>
       </div>
     </div>
@@ -1072,9 +1739,13 @@ function Panel2Content({
       </div>
 
       <div className={`${s.panel2Footer} ${s.panel2FooterTop}`}>
-        <button className={s.backBtn}>← Previous Step</button>
+        <button className={s.backBtn}>
+          <ArrowIcon direction="left" color="#333" />
+          Previous Step
+        </button>
         <button onClick={handleNext} className={s.nextBtn}>
-          Next Step: Payment Method →
+          Next Step: Payment Method
+          <ArrowIcon direction="right" color="#fff" />
         </button>
       </div>
 
@@ -1086,7 +1757,7 @@ function Panel2Content({
             shipsOn="Monday, August 31st, 2026"
             items={[
               {
-                img: "",
+                img: imgB6000ZZ,
                 alias: "",
                 partNum: "B6000ZZ",
                 name: "Deep Groove Ball Bearing - Double Shielded",
@@ -1099,7 +1770,7 @@ function Panel2Content({
                 shipsOn: "08/31/2026",
               },
               {
-                img: "",
+                img: imgBCAS32,
                 alias: "",
                 partNum: "BCAS32",
                 name: "Ball Catches",
@@ -1119,7 +1790,7 @@ function Panel2Content({
             shipsOn="Monday, September 2nd, 2026"
             items={[
               {
-                img: "",
+                img: imgMFB2510,
                 alias: "",
                 partNum: "MFB25-10",
                 name: "Straight Linear Plain Bearings - Metallic, Graphite Impregnated",
@@ -1141,7 +1812,7 @@ function Panel2Content({
           shipsOn="Monday, September 2nd, 2026"
           items={[
             {
-              img: "",
+              img: imgB6000ZZ,
               alias: "",
               partNum: "B6000ZZ",
               name: "Deep Groove Ball Bearing - Double Shielded",
@@ -1154,7 +1825,7 @@ function Panel2Content({
               shipsOn: "08/31/2026",
             },
             {
-              img: "",
+              img: imgBCAS32,
               alias: "",
               partNum: "BCAS32",
               name: "Ball Catches",
@@ -1167,7 +1838,7 @@ function Panel2Content({
               shipsOn: "08/31/2026",
             },
             {
-              img: "",
+              img: imgMFB2510,
               alias: "",
               partNum: "MFB25-10",
               name: "Straight Linear Plain Bearings - Metallic, Graphite Impregnated",
@@ -1183,9 +1854,13 @@ function Panel2Content({
         />
       )}
       <div className={s.panel2Footer}>
-        <button className={s.backBtn}>← Previous Step</button>
+        <button className={s.backBtn}>
+          <ArrowIcon direction="left" color="#333" />
+          Previous Step
+        </button>
         <button onClick={handleNext} className={s.nextBtn}>
-          Next Step: Payment Method →
+          Next Step: Payment Method
+          <ArrowIcon direction="right" color="#fff" />
         </button>
       </div>
     </div>
@@ -1304,12 +1979,6 @@ function PackageTable({
           </div>
         ))}
       </div>
-      <div className={s.packageTableNote}>
-        <span className={s.noteIcon}>i</span>
-        <span className={s.noteText}>
-          Warehouse Pickup locations are restricted to specific zones.
-        </span>
-      </div>
     </div>
   );
 }
@@ -1393,11 +2062,12 @@ function Panel3Content({
             </div>
             {method === "po" && (
               <div className={s.poSection}>
-                <label className={s.poLabel}>
-                  PURCHASE ORDER #{" "}
-                  <span className={s.poRequired}>(REQUIRED)</span>{" "}
-                  <span className={s.poRequired}>*</span>
-                </label>
+                <div className={s.poLabelGroup}>
+                  <label className={s.poLabel}>PURCHASE ORDER #</label>
+                  <span className={s.poRequiredText}>
+                    * Required for Pay on Terms
+                  </span>
+                </div>
                 <div className={s.poInputWrap}>
                   <input
                     value={poNumber}
@@ -1729,7 +2399,10 @@ function Panel3Content({
         </div>
       </div>
       <div className={s.panel3Footer}>
-        <button className={s.backBtn}>← Previous Step</button>
+        <button className={s.backBtn}>
+          <ArrowIcon direction="left" color="#333" />
+          Previous Step
+        </button>
       </div>
     </div>
   );
@@ -1845,7 +2518,14 @@ export default function CheckoutPage() {
     new Set(),
   );
   const [modal, setModal] = useState<ModalType>(null);
-  const [selectedAddr, setSelectedAddr] = useState({
+  const [addressModalView, setAddressModalView] = useState<"select" | "edit">(
+    "select",
+  );
+  const [selectedAddr, setSelectedAddr] = useState<{
+    name: string;
+    addr: string;
+    phone: string;
+  } | null>({
     name: "MISUMI USA WOS+",
     addr: "1475 E Woodfield Rd.\nSte 1300\nSchaumburg, IL 60173-5482 USA",
     phone: "1-800-681-7475",
@@ -1865,7 +2545,17 @@ export default function CheckoutPage() {
           onSelect={(name, addr) =>
             setSelectedAddr({ name, addr, phone: "1-800-681-7475" })
           }
-          currentAddr={{ name: selectedAddr.name, addr: selectedAddr.addr }}
+          onClearAddress={() => {
+            setSelectedAddr(null);
+            setAddressCarrierMethod("");
+            setAddressAccountNumber("");
+          }}
+          currentAddr={
+            selectedAddr
+              ? { name: selectedAddr.name, addr: selectedAddr.addr }
+              : null
+          }
+          initialView={addressModalView}
           carrierMethod={addressCarrierMethod}
           carrierAccountNum={addressAccountNumber}
           onSaveCarrierAccount={(method, account) => {
@@ -1925,7 +2615,7 @@ export default function CheckoutPage() {
               stepNum={1}
               title="Shipping Address"
               summary={
-                completedPanels.has(1) ? (
+                completedPanels.has(1) && selectedAddr ? (
                   <span className={s.panelSummaryTextPre}>
                     {selectedAddr.name}, {selectedAddr.addr.split("\n")[1]}
                   </span>
@@ -1937,7 +2627,14 @@ export default function CheckoutPage() {
             {openPanel === 1 && (
               <Panel1Content
                 onNext={() => advanceTo(2, 1)}
-                onChangeAddress={() => setModal("change")}
+                onChangeAddress={() => {
+                  setAddressModalView("select");
+                  setModal("change");
+                }}
+                onEditAddress={() => {
+                  setAddressModalView("edit");
+                  setModal("change");
+                }}
                 selectedAddr={selectedAddr}
                 carrierMethod={addressCarrierMethod}
                 carrierAccountNum={addressAccountNumber}

@@ -1039,21 +1039,19 @@
   height: 0.875rem;
 }
 
-.panel2Footer {
+.panel2FooterTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom:1px solid #e2e8f0;
+  padding: 0 1.25rem 1.25rem 1.25rem;
   margin-top: 1.25rem;
-}
-
-.panel2FooterTop {
-  margin-bottom: 2rem;
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 /* ── PackageTable ── */
-.packageTableWrap {
-  margin-bottom: 1.25rem;
-}
 
 .packageTableHeader {
   display: flex;
@@ -1067,7 +1065,7 @@
 }
 
 .packageLabel {
-  background-color: #0062bd;
+  background-color: #0f0f0f;
   color: #ffffff;
   font-family: "Roboto:Medium", sans-serif;
   font-weight: 500;

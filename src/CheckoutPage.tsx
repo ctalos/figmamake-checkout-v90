@@ -1392,6 +1392,7 @@ function Panel2Content({
     defaultCarrierMethod === "prepaid" ? "prepaid" : "billed",
   );
   const [speedMethod, setSpeedMethod] = useState("ground");
+  const [speedSelectError, setSpeedSelectError] = useState(false);
   const [savedAccount, setSavedAccount] = useState<{
     method: string;
     account: string;
@@ -1460,20 +1461,40 @@ function Panel2Content({
   }
 
   function handleNext() {
-    if (shippingType === "billed" && !savedAccount) {
+    let hasError = false;
+
+    if (!speedMethod) {
+      setSpeedSelectError(true);
+      hasError = true;
+    } else {
+      setSpeedSelectError(false);
+    }
+
+    const editingAccount =
+      shippingType === "billed" && (!savedAccount || accountForm === "edit");
+
+    if (editingAccount) {
       if (!formCarrier) {
         setCarrierSelectError(true);
-        setAccountNumError(false);
-        return;
+        hasError = true;
+      } else {
+        setCarrierSelectError(false);
       }
       if (!formAccountNum.trim()) {
         setAccountNumError(true);
-        setCarrierSelectError(false);
-        return;
+        hasError = true;
+      } else {
+        setAccountNumError(false);
       }
+    }
+
+    if (hasError) return;
+
+    if (editingAccount) {
       const saved = { method: formCarrier, account: formAccountNum.trim() };
       setSavedAccount(saved);
       onAccountChange(saved.method, saved.account);
+      setAccountForm(null);
       setFormCarrier("");
       setFormAccountNum("");
     }
@@ -1604,8 +1625,14 @@ function Panel2Content({
               {/* Speed dropdown — same for both tabs */}
               <select
                 value={speedMethod}
-                onChange={(e) => setSpeedMethod(e.target.value)}
-                className={s.shippingSelect}
+                onChange={(e) => {
+                  setSpeedMethod(e.target.value);
+                  if (speedSelectError) setSpeedSelectError(false);
+                }}
+                className={[
+                  s.shippingSelect,
+                  speedSelectError ? s.caInputError : "",
+                ].join(" ")}
               >
                 <option value="">--Please select--</option>
                 <option value="ground">Ground (2-4 business days)</option>
@@ -1657,7 +1684,7 @@ function Panel2Content({
                       <div className={s.caErrorRow}>
                         <span className={s.caErrorIcon}>!</span>
                         Please add a carrier account or switch to Prepaid
-                        Shipping to continue.
+                        Shipping.
                       </div>
                     )}
                     {formCarrier && (
@@ -1738,7 +1765,7 @@ function Panel2Content({
         </div>
       </div>
 
-      <div className={`${s.panel2Footer} ${s.panel2FooterTop}`}>
+      <div className={s.panel2FooterTop}>
         <button className={s.backBtn}>
           <ArrowIcon direction="left" color="#333" />
           Previous Step
@@ -1853,16 +1880,6 @@ function Panel2Content({
           ]}
         />
       )}
-      <div className={s.panel2Footer}>
-        <button className={s.backBtn}>
-          <ArrowIcon direction="left" color="#333" />
-          Previous Step
-        </button>
-        <button onClick={handleNext} className={s.nextBtn}>
-          Next Step: Payment Method
-          <ArrowIcon direction="right" color="#fff" />
-        </button>
-      </div>
     </div>
   );
 }

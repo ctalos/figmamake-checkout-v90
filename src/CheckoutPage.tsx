@@ -1236,8 +1236,8 @@ function Panel1Content({
       <div className={s.selectedAddrSection}>
         <div className={s.selectedAddrHeader}>
           <span className={s.selectedAddrLabel}>Selected Address</span>
-          <button onClick={onChangeAddress} className={s.selectNewAddrBtn}>
-            <svg className={s.selectNewAddrIcon} fill="none" viewBox="0 0 14 14">
+          <button onClick={onChangeAddress} className={s.changeAddressBtn}>
+            <svg className={s.changeAddressIcon} fill="none" viewBox="0 0 14 14">
               <path
                 d="M7 2.33333V11.6667M11.6667 7H2.33333"
                 stroke="#0062BD"
@@ -2414,12 +2414,12 @@ function Panel3Content({
             )}
           </div>
         </div>
-      </div>
-      <div className={s.panel3Footer}>
+        <div className={s.panel3Footer}>
         <button className={s.backBtn}>
           <ArrowIcon direction="left" color="#333" />
           Previous Step
         </button>
+      </div>
       </div>
     </div>
   );

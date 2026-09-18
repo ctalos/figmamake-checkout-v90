@@ -282,14 +282,14 @@
 }
 
 .selectedAddrSection {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .selectedAddrHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .selectedAddrLabel {
@@ -324,7 +324,6 @@
   display: flex;
   flex-wrap: wrap;
   flex-flow: column;
-  border-left: 1px solid #e5e7eb;
   padding-left: 2rem;
 }
 
@@ -338,14 +337,14 @@
 
 .addrCardLine {
   font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #555;
   margin-top: 0.125rem;
 }
 
 .addrCardPhone {
   font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   margin-top: 0.5rem;
   color: #555;
 }
@@ -357,16 +356,15 @@
 
 .addrCardMeta {
   font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #555;
 }
 
 .addrCardMetaDivider {
   font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #555;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .addrCardMetaBold {
@@ -393,7 +391,7 @@
 
 .addrCardFieldLabel {
   font-family: "Roboto:Regular", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #555;
   flex-shrink: 0;
 }
@@ -406,7 +404,7 @@
   padding-right: 0.5rem;
   padding-top: 0.125rem;
   padding-bottom: 0.125rem;
-  font-size: 12px;
+  font-size: 13px;
   width: 11rem;
   color: #555;
   outline: none;
@@ -446,11 +444,34 @@
   height: 0.875rem;
 }
 
+.changeAddressBtn {
+  border: none;
+  color: #0062bd;
+  font-size: 13px;
+  font-family: "Roboto:Bold", sans-serif;
+  font-weight: 700;
+  border-radius: 4px;
+  padding:0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.changeAddressIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
 .panel1Footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .backBtn {
@@ -571,11 +592,10 @@
 }
 
 .shippingOptionsBox {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   background-color: rgba(248, 250, 252, 0.8);
   padding: 1.25rem;
-  margin-bottom: 1.25rem;
 }
 
 .shippingOptionsInner {
@@ -589,7 +609,7 @@
   display: flex;
   flex: 1 1 0%;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .sectionNumberRow {
@@ -729,7 +749,7 @@
   max-width:380px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   align-self: stretch;
 }
 
@@ -746,7 +766,7 @@
 .shippingToggle {
   display: flex;
   align-items: center;
-  background-color: #e2e8f0;
+  background-color: #e5e7eb;
   border-radius: 4px;
   padding: 6px;
   gap: 8px;
@@ -950,14 +970,18 @@
   background-color: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  padding: 0 13px;
+  padding: 0 2rem 0 13px;
   height: 42px;
   font-size: 14px;
   font-family: "Roboto:Regular", sans-serif;
   color: #333;
   width: 100%;
   cursor: pointer;
-  appearance: auto;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23333333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 10px 6px;
 }
 
 .accountRow {
@@ -1043,9 +1067,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom:1px solid #e2e8f0;
+  border-bottom:1px solid #e5e7eb;
   padding: 0 1.25rem 1.25rem 1.25rem;
-  margin-top: 1.25rem;
+  margin-top: 0.75rem;
   margin-left: -1.25rem;
   margin-right: -1.25rem;
   margin-bottom: 1.25rem;
@@ -1057,11 +1081,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding:0;
+  margin-bottom: 0.75rem;
 }
 
 .packageLabel {
@@ -1378,7 +1399,7 @@
 .panel3Body {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
   padding: 1.25rem;
 }
 
@@ -1407,14 +1428,14 @@
 .paymentCardInner {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   padding: 1.25rem;
 }
 
 .paymentCardInnerCard {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   padding: 1.25rem;
 }
 
@@ -1695,7 +1716,7 @@
 }
 
 .cardFormHeader {
-  padding-bottom: 1rem;
+  padding-bottom: 0.75rem;
   display: flex;
   flex-direction: column;
 }
@@ -1704,7 +1725,7 @@
   font-family: "Roboto:Medium", sans-serif;
   font-weight: 500;
   font-size: 1rem;
-  margin: 1rem 0 0 0;
+  margin: 0.75rem 0 0 0;
   color: #111827;
 }
 
@@ -1996,9 +2017,7 @@
 .panel3Footer {
   display: flex;
   align-items: center;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-bottom: 1.5rem;
+  margin-top: 0.25rem;
 }
 
 /* ── Order Sidebar ── */
@@ -3174,13 +3193,17 @@
 .caSelect {
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 8px 2rem 8px 12px;
   font-size: 13px;
   font-family: "Roboto:Regular", sans-serif;
   color: #333;
   background: #fff;
   outline: none;
-  appearance: auto;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23333333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 10px 6px;
 
   &:focus {
     border-color: #0062bd;

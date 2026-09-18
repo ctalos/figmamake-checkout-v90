@@ -1077,6 +1077,13 @@
 
 /* ── PackageTable ── */
 
+.packageTableWrap {
+  margin-bottom: 1.25rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
 .packageTableHeader {
   display: flex;
   align-items: center;
@@ -3276,8 +3283,8 @@
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 16px;
-  padding-top: 14px;
+  margin-top: 0;
+  padding-top: 1rem;
   border-top: 1px solid #e5e7eb;
 }
 

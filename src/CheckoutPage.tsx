@@ -71,11 +71,16 @@ function formatAddr(f: {
   const stateLabel = f.state
     ? stateLabels[f.state] ?? f.state.toUpperCase()
     : "";
-  const line2 = [f.city, [stateLabel, f.zip].filter(Boolean).join(" ")]
+  const countryLabel = f.country === "ca" ? "Canada" : "USA";
+  const line2 = [
+    f.city,
+    [stateLabel, f.zip].filter(Boolean).join(" "),
+  ]
     .filter(Boolean)
     .join(", ");
-  const line3 = f.country === "ca" ? "Canada" : "USA";
-  return [f.street, line2, line3].filter(Boolean).join("\n");
+  return [f.street, [line2, countryLabel].filter(Boolean).join(" ")]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function buildSeedAddresses(
@@ -102,8 +107,8 @@ function buildSeedAddresses(
     },
     {
       id: 2,
-      name: "MISUMI Warehouse B",
-      addr: "2500 Enterprise Pkwy\nChicago, IL 60666\nUSA",
+      name: "Ace Fabrication Co.",
+      addr: "2500 Enterprise Pkwy\nChicago, IL 60666 USA",
       street: "2500 Enterprise Pkwy",
       city: "Chicago",
       state: "il",
@@ -115,8 +120,8 @@ function buildSeedAddresses(
     },
     {
       id: 3,
-      name: "MISUMI Assembly Plant",
-      addr: "1020 Meacham Rd\nSchaumburg, IL 60173\nUSA",
+      name: "Bluegrass Machine Works",
+      addr: "1020 Meacham Rd\nSchaumburg, IL 60173 USA",
       street: "1020 Meacham Rd",
       city: "Schaumburg",
       state: "il",
@@ -129,7 +134,7 @@ function buildSeedAddresses(
     {
       id: 4,
       name: "Torrance Distribution Center",
-      addr: "2515 Columbia St\nTorrance, CA 90503\nUSA",
+      addr: "2515 Columbia St\nTorrance, CA 90503 USA",
       street: "2515 Columbia St",
       city: "Torrance",
       state: "ca",
@@ -142,7 +147,7 @@ function buildSeedAddresses(
     {
       id: 5,
       name: "Home",
-      addr: "482 Maple Grove Ln\nSan Jose, CA 95123\nUSA",
+      addr: "482 Maple Grove Ln\nSan Jose, CA 95123 USA",
       street: "482 Maple Grove Ln",
       city: "San Jose",
       state: "ca",
@@ -155,7 +160,7 @@ function buildSeedAddresses(
     {
       id: 6,
       name: "MISUMI NY Office",
-      addr: "111 W 33rd St\nNew York, NY 10120\nUSA",
+      addr: "111 W 33rd St\nNew York, NY 10120 USA",
       street: "111 W 33rd St",
       city: "New York",
       state: "ny",
@@ -168,7 +173,7 @@ function buildSeedAddresses(
     {
       id: 7,
       name: "MISUMI Canada Ltd",
-      addr: "6395 Kestrel Rd\nMississauga, ON L5T 1Z5\nCanada",
+      addr: "6395 Kestrel Rd\nMississauga, ON L5T 1Z5 Canada",
       street: "6395 Kestrel Rd",
       city: "Mississauga",
       state: "",
@@ -616,7 +621,7 @@ function ChangeAddressModal({
     currentAddr && initialView === "edit" ? 1 : null,
   );
   const [removingId, setRemovingId] = useState<number | null>(null);
-  const [sortOrder, setSortOrder] = useState<"recent" | "oldest">("recent");
+  const [sortOrder, setSortOrder] = useState<"recent" | "az" | "za">("recent");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const sortMenuRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -635,13 +640,11 @@ function ChangeAddressModal({
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [sortMenuOpen]);
 
-  const selectedAddress = addresses.find((a) => a.id === selectedId) ?? null;
   const editingAddress = addresses.find((a) => a.id === editingId) ?? null;
   const removingAddress = addresses.find((a) => a.id === removingId) ?? null;
   const showSearch = addresses.length >= 5;
 
-  const savedList = addresses
-    .filter((a) => a.id !== selectedId)
+  const sortedAddresses = addresses
     .filter((a) =>
       searchQuery.trim()
         ? (a.name + " " + a.addr)
@@ -649,17 +652,11 @@ function ChangeAddressModal({
             .includes(searchQuery.trim().toLowerCase())
         : true,
     )
-    .sort((a, b) =>
-      sortOrder === "recent"
-        ? b.recentValue - a.recentValue
-        : a.recentValue - b.recentValue,
-    );
-
-  function togglePreferred(id: number) {
-    setAddresses((prev) =>
-      prev.map((a) => ({ ...a, isPreferred: a.id === id })),
-    );
-  }
+    .sort((a, b) => {
+      if (sortOrder === "recent") return b.recentValue - a.recentValue;
+      if (sortOrder === "az") return a.name.localeCompare(b.name);
+      return b.name.localeCompare(a.name);
+    });
 
   function selectAddress(addr: SavedAddress) {
     setSelectedId(addr.id);
@@ -670,9 +667,60 @@ function ChangeAddressModal({
 
   function confirmUseAddress() {
     if (pendingId === null) return;
+    if (pendingId === selectedId) {
+      onClose();
+      return;
+    }
     const addr = addresses.find((a) => a.id === pendingId);
     if (addr) selectAddress(addr);
     onClose();
+  }
+
+  function renderAddressRow(a: SavedAddress) {
+    const activeId = pendingId ?? selectedId;
+    const isActive = a.id === activeId;
+    return (
+      <div
+        key={a.id}
+        onClick={() => setPendingId(a.id)}
+        className={[
+          s.caSavedItem,
+          isActive ? s.caSavedItemSelected : "",
+        ].join(" ")}
+      >
+        <div
+          className={[
+            s.caSavedRadio,
+            isActive ? s.caSavedRadioActive : "",
+          ].join(" ")}
+        >
+          {isActive && <div className={s.caSavedRadioDot} />}
+        </div>
+        <div className={s.caSavedInfo}>
+          <div className={s.caSavedNameRow}>
+            <span className={s.caSavedName}>{a.name}</span>
+            {a.isPreferred && (
+              <span className={s.caSavedPrimary}>Preferred</span>
+            )}
+          </div>
+          <div className={s.caSavedAddr}>{a.addr}</div>
+        </div>
+        <div className={s.caCardTopActions}>
+          <IconEditButton
+            onClick={(e) => {
+              e.stopPropagation();
+              openEditFor(a.id);
+            }}
+          />
+          <IconDeleteButton
+            onClick={(e) => {
+              e.stopPropagation();
+              openRemoveFor(a.id);
+            }}
+          />
+        </div>
+      </div>
+    );
   }
 
   function openEditFor(id: number) {
@@ -721,10 +769,150 @@ function ChangeAddressModal({
         {view === "select" && (
           <div className={s.caBody}>
             <div className={s.caSection}>
-              <div className={s.caSelectedHeaderRow}>
-                <p className={s.caSectionTitle}>
-                  Selected address (for this order)
-                </p>
+              <div className={s.caAddrListHeaderRow}>
+                <div className={s.caSavedHeader}>
+                  <p className={s.caSectionTitle}>
+                    Addresses ({addresses.length})
+                  </p>
+                  {addresses.length > 1 && (
+                    <div className={s.caSortRow}>
+                      <svg
+                        className={s.caSortLabelIcon}
+                        viewBox="0 0 10 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2.5 4.5L5 1.5L7.5 4.5M2.5 7.5L5 10.5L7.5 7.5"
+                          stroke="#b1b7bf"
+                          strokeWidth="1.1"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span className={s.caSortLabel}>Sort by</span>
+                      <div className={s.caSortDropdown} ref={sortMenuRef}>
+                          <button
+                            type="button"
+                            className={s.caSortTrigger}
+                            onClick={() => setSortMenuOpen((open) => !open)}
+                          >
+                            {sortOrder === "recent"
+                              ? "Most recent"
+                              : sortOrder === "az"
+                                ? "A – Z"
+                                : "Z – A"}
+                            <svg
+                              className={s.caSortTriggerIcon}
+                              viewBox="0 0 10 6"
+                              fill="none"
+                            >
+                              <path
+                                d="M1 1l4 4 4-4"
+                                stroke="#0062bd"
+                                strokeWidth="1.4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </button>
+                          {sortMenuOpen && (
+                            <div className={s.caSortMenu}>
+                              <button
+                                type="button"
+                                className={[
+                                  s.caSortMenuItem,
+                                  sortOrder === "recent"
+                                    ? s.caSortMenuItemActive
+                                    : "",
+                                ].join(" ")}
+                                onClick={() => {
+                                  setSortOrder("recent");
+                                  setSortMenuOpen(false);
+                                }}
+                              >
+                                Most recent
+                                {sortOrder === "recent" && (
+                                  <svg
+                                    className={s.caSortMenuCheck}
+                                    viewBox="0 0 12 10"
+                                    fill="none"
+                                  >
+                                    <path
+                                      d="M1 5l3.5 3.5L11 1"
+                                      stroke="#0062bd"
+                                      strokeWidth="1.6"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                )}
+                              </button>
+                              <button
+                                type="button"
+                                className={[
+                                  s.caSortMenuItem,
+                                  sortOrder === "az"
+                                    ? s.caSortMenuItemActive
+                                    : "",
+                                ].join(" ")}
+                                onClick={() => {
+                                  setSortOrder("az");
+                                  setSortMenuOpen(false);
+                                }}
+                              >
+                                A – Z
+                                {sortOrder === "az" && (
+                                  <svg
+                                    className={s.caSortMenuCheck}
+                                    viewBox="0 0 12 10"
+                                    fill="none"
+                                  >
+                                    <path
+                                      d="M1 5l3.5 3.5L11 1"
+                                      stroke="#0062bd"
+                                      strokeWidth="1.6"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                )}
+                              </button>
+                              <button
+                                type="button"
+                                className={[
+                                  s.caSortMenuItem,
+                                  sortOrder === "za"
+                                    ? s.caSortMenuItemActive
+                                    : "",
+                                ].join(" ")}
+                                onClick={() => {
+                                  setSortOrder("za");
+                                  setSortMenuOpen(false);
+                                }}
+                              >
+                                Z – A
+                                {sortOrder === "za" && (
+                                  <svg
+                                    className={s.caSortMenuCheck}
+                                    viewBox="0 0 12 10"
+                                    fill="none"
+                                  >
+                                    <path
+                                      d="M1 5l3.5 3.5L11 1"
+                                      stroke="#0062bd"
+                                      strokeWidth="1.6"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                )}
+                              </button>
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={() => setView("add")}
                   className={s.caAddLink}
@@ -745,208 +933,43 @@ function ChangeAddressModal({
                   Add new address
                 </button>
               </div>
-              {selectedAddress && (
-                <div className={s.caCurrentCard}>
-                  <div className={s.caCurrentCardTopRow}>
-                    <div className={s.caCurrentCardRadio}>
-                      <div className={s.caRadioFilled}>
-                        <div className={s.caRadioFilledDot} />
-                      </div>
-                    </div>
-                    <div className={s.caCurrentNameRow}>
-                      <span className={s.caCurrentName}>
-                        {selectedAddress.name}
-                      </span>
-                      {selectedAddress.isPreferred && (
-                        <span className={s.caSavedPrimary}>Preferred</span>
-                      )}
-                    </div>
-                    <div className={s.caCardTopActions}>
-                      <IconEditButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEditFor(selectedAddress.id);
-                        }}
+              {showSearch && (
+                <div className={s.caSearchRow}>
+                  <div className={s.caSearchWrap}>
+                    <svg
+                      className={s.caSearchIcon}
+                      fill="none"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d={svgPathsAac.p2aa1a600}
+                        stroke="#9CA3AF"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.33333"
                       />
-                      <IconDeleteButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openRemoveFor(selectedAddress.id);
-                        }}
-                      />
-                    </div>
+                    </svg>
+                    <input
+                      className={s.caSearchInput}
+                      placeholder="Search your saved addresses..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                   </div>
-                  <div className={s.caCurrentCardBody}>
-                    <div className={s.caCurrentAddr}>
-                      {selectedAddress.addr}
-                    </div>
-                    {!selectedAddress.isPreferred && (
-                      <label className={s.caPreferredRow}>
-                        <input
-                          type="checkbox"
-                          className={s.caCheckbox}
-                          checked={false}
-                          onChange={() => togglePreferred(selectedAddress.id)}
-                        />
-                        <span className={s.caCheckboxLabel}>
-                          Make this my preferred address
-                        </span>
-                        <PreferredAddressInfoIcon />
-                      </label>
-                    )}
-                  </div>
+                  <button className={s.caSearchBtn}>Search</button>
                 </div>
               )}
-            </div>
-
-            {addresses.length > 1 && (
-              <div className={s.caSection}>
-                <div className={s.caSavedHeader}>
-                  <p className={s.caSectionTitle}>
-                    Saved addresses ({savedList.length})
-                  </p>
-                  <span className={s.caSavedHeaderDivider}>|</span>
-                  <div className={s.caSortRow}>
-                    <span className={s.caSortLabel}>Sort by</span>
-                    <div className={s.caSortDropdown} ref={sortMenuRef}>
-                      <button
-                        type="button"
-                        className={s.caSortTrigger}
-                        onClick={() => setSortMenuOpen((open) => !open)}
-                      >
-                        {sortOrder === "recent" ? "Most recent" : "Least recent"}
-                        <svg
-                          className={s.caSortTriggerIcon}
-                          viewBox="0 0 10 6"
-                          fill="none"
-                        >
-                          <path
-                            d="M1 1l4 4 4-4"
-                            stroke="#0062bd"
-                            strokeWidth="1.4"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-                      {sortMenuOpen && (
-                        <div className={s.caSortMenu}>
-                          <button
-                            type="button"
-                            className={[
-                              s.caSortMenuItem,
-                              sortOrder === "recent"
-                                ? s.caSortMenuItemActive
-                                : "",
-                            ].join(" ")}
-                            onClick={() => {
-                              setSortOrder("recent");
-                              setSortMenuOpen(false);
-                            }}
-                          >
-                            Most recent
-                          </button>
-                          <button
-                            type="button"
-                            className={[
-                              s.caSortMenuItem,
-                              sortOrder === "oldest"
-                                ? s.caSortMenuItemActive
-                                : "",
-                            ].join(" ")}
-                            onClick={() => {
-                              setSortOrder("oldest");
-                              setSortMenuOpen(false);
-                            }}
-                          >
-                            Least recent
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {showSearch && (
-                  <div className={s.caSearchRow}>
-                    <div className={s.caSearchWrap}>
-                      <svg
-                        className={s.caSearchIcon}
-                        fill="none"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d={svgPathsAac.p2aa1a600}
-                          stroke="#9CA3AF"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.33333"
-                        />
-                      </svg>
-                      <input
-                        className={s.caSearchInput}
-                        placeholder="Search your saved addresses..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                    </div>
-                    <button className={s.caSearchBtn}>Search</button>
-                  </div>
-                )}
+              <div className={s.caSavedListWrap}>
                 <div
-                  className={[
-                    s.caSavedList,
-                    showSearch ? s.caSavedListScroll : "",
-                  ].join(" ")}
+                  className={[s.caSavedList, s.caSavedListScroll].join(" ")}
                 >
-                  {savedList.map((a) => (
-                    <div
-                      key={a.id}
-                      onClick={() => setPendingId(a.id)}
-                      className={[
-                        s.caSavedItem,
-                        pendingId === a.id ? s.caSavedItemSelected : "",
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          s.caSavedRadio,
-                          pendingId === a.id ? s.caSavedRadioActive : "",
-                        ].join(" ")}
-                      >
-                        {pendingId === a.id && (
-                          <div className={s.caSavedRadioDot} />
-                        )}
-                      </div>
-                      <div className={s.caSavedInfo}>
-                        <div className={s.caSavedNameRow}>
-                          <span className={s.caSavedName}>{a.name}</span>
-                          {a.isPreferred && (
-                            <span className={s.caSavedPrimary}>
-                              Preferred
-                            </span>
-                          )}
-                        </div>
-                        <div className={s.caSavedAddr}>{a.addr}</div>
-                      </div>
-                      <div className={s.caCardTopActions}>
-                        <IconEditButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openEditFor(a.id);
-                          }}
-                        />
-                        <IconDeleteButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openRemoveFor(a.id);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                  {sortedAddresses.map((a) => renderAddressRow(a))}
                 </div>
+                {sortedAddresses.length >= 4 && (
+                  <div className={s.caSavedListFade} />
+                )}
               </div>
-            )}
+            </div>
 
             <div className={s.caFormFooter}>
               <button onClick={onClose} className={s.modalCancelBtn}>

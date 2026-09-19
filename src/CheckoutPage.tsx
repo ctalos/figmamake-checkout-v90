@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import svgPaths from "../imports/svg-otyv9vxe4n";
 import svgPathsAac from "../imports/svg-aacepbrbow";
 import svgPathsGol from "../imports/svg-gol9aevr63";
@@ -8,6 +8,8 @@ import imgMFB2510 from "./imports/Step2/MFB25-10.jpg";
 import s from "./styles/checkout.module.scss";
 
 type ModalType = "change" | null;
+
+type TooltipMessage = { prefix: string; bold: string; suffix: string };
 
 const CARRIER_METHODS = [
   "ups-collect",
@@ -2017,32 +2019,38 @@ function CardBadges() {
 }
 
 function Panel3Content({
-  onComplete,
-  onDisable,
+  method,
+  poNumber,
+  cardNumber,
+  poError,
+  cardError,
+  poInputRef,
+  cardInputRef,
+  onMethodChange,
+  onPoNumberChange,
+  onCardNumberChange,
 }: {
-  onComplete: () => void;
-  onDisable: () => void;
+  method: "po" | "card";
+  poNumber: string;
+  cardNumber: string;
+  poError: boolean;
+  cardError: boolean;
+  poInputRef: RefObject<HTMLInputElement | null>;
+  cardInputRef: RefObject<HTMLInputElement | null>;
+  onMethodChange: (m: "po" | "card") => void;
+  onPoNumberChange: (val: string) => void;
+  onCardNumberChange: (val: string) => void;
 }) {
-  const [method, setMethod] = useState<"po" | "card">("po");
-  const [poNumber, setPoNumber] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
   const poFilled = poNumber.trim().length > 0;
   const cardFilled = cardNumber.trim().length > 0;
   function switchMethod(m: "po" | "card") {
-    setMethod(m);
-    setPoNumber("");
-    setCardNumber("");
-    onDisable();
+    onMethodChange(m);
   }
   function handlePoChange(val: string) {
-    setPoNumber(val);
-    if (val.trim().length > 0) onComplete();
-    else onDisable();
+    onPoNumberChange(val);
   }
   function handleCardChange(val: string) {
-    setCardNumber(val);
-    if (val.trim().length > 0) onComplete();
-    else onDisable();
+    onCardNumberChange(val);
   }
   return (
     <div className={s.panel3Content}>
@@ -2087,10 +2095,14 @@ function Panel3Content({
                 </div>
                 <div className={s.poInputWrap}>
                   <input
+                    ref={poInputRef}
                     value={poNumber}
                     onChange={(e) => handlePoChange(e.target.value)}
                     placeholder="e.g. PO-98421-B"
-                    className={s.poInput}
+                    className={[
+                      s.poInput,
+                      poError ? s.caInputError : "",
+                    ].join(" ")}
                   />
                   {poFilled && (
                     <svg
@@ -2109,6 +2121,12 @@ function Panel3Content({
                     </svg>
                   )}
                 </div>
+                {poError && (
+                  <div className={s.caErrorRow}>
+                    <span className={s.caErrorIcon}>!</span>
+                    Purchase Order number is required.
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -2181,12 +2199,19 @@ function Panel3Content({
                           <span className={s.cardFormLabelRequired}>*</span>
                         </span>
                       </div>
-                      <div className={s.cardFormValue}>
+                      <div
+                        className={s.cardFormValue}
+                        style={{ flexDirection: "column", alignItems: "flex-start", gap: "0.25rem" }}
+                      >
                         <div className={s.cardInputRelative}>
                           <input
+                            ref={cardInputRef}
                             value={cardNumber}
                             onChange={(e) => handleCardChange(e.target.value)}
-                            className={s.cardInput}
+                            className={[
+                              s.cardInput,
+                              cardError ? s.caInputError : "",
+                            ].join(" ")}
                           />
                           {cardFilled ? (
                             <svg
@@ -2219,6 +2244,12 @@ function Panel3Content({
                             </svg>
                           )}
                         </div>
+                        {cardError && (
+                          <div className={s.caErrorRow}>
+                            <span className={s.caErrorIcon}>!</span>
+                            Card number is required.
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className={s.cardFormRow}>
@@ -2425,7 +2456,16 @@ function Panel3Content({
   );
 }
 
-function OrderSidebar({ orderEnabled }: { orderEnabled: boolean }) {
+function OrderSidebar({
+  orderEnabled,
+  tooltipMessage,
+  onSubmit,
+}: {
+  orderEnabled: boolean;
+  tooltipMessage: TooltipMessage | null;
+  onSubmit: () => void;
+}) {
+  const [showTooltip, setShowTooltip] = useState(false);
   return (
     <div className={s.sidebar}>
       <div className={s.sidebarBox}>
@@ -2487,15 +2527,33 @@ function OrderSidebar({ orderEnabled }: { orderEnabled: boolean }) {
           </div>
         </div>
         <div className={s.sidebarButtons}>
-          <button
-            disabled={!orderEnabled}
-            className={[
-              s.submitBtn,
-              orderEnabled ? s.submitBtnEnabled : s.submitBtnDisabled,
-            ].join(" ")}
+          <div
+            className={s.submitBtnWrap}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
           >
-            SUBMIT ORDER
-          </button>
+            {showTooltip && tooltipMessage && (
+              <div className={s.submitTooltip} role="tooltip">
+                <span className={s.submitTooltipDot} />
+                <span>
+                  {tooltipMessage.prefix}
+                  <strong>{tooltipMessage.bold}</strong>
+                  {tooltipMessage.suffix}
+                </span>
+              </div>
+            )}
+            <button
+              onFocus={() => setShowTooltip(true)}
+              onBlur={() => setShowTooltip(false)}
+              onClick={onSubmit}
+              className={[
+                s.submitBtn,
+                orderEnabled ? s.submitBtnEnabled : s.submitBtnDisabled,
+              ].join(" ")}
+            >
+              SUBMIT ORDER
+            </button>
+          </div>
           <button className={s.backToCartBtn}>BACK TO CART</button>
         </div>
         <div className={s.sidebarDivider} />
@@ -2554,6 +2612,96 @@ export default function CheckoutPage() {
     setCompletedPanels((prev) => new Set([...prev, completed]));
     setOpenPanel(next);
   };
+
+  const [paymentMethod, setPaymentMethod] = useState<"po" | "card">("po");
+  const [poNumber, setPoNumber] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [poError, setPoError] = useState(false);
+  const [cardError, setCardError] = useState(false);
+  const [pendingFocusField, setPendingFocusField] = useState<
+    "po" | "card" | null
+  >(null);
+  const poInputRef = useRef<HTMLInputElement>(null);
+  const cardInputRef = useRef<HTMLInputElement>(null);
+
+  function updateStep3Completion(filled: boolean) {
+    setCompletedPanels((prev) => {
+      const next = new Set(prev);
+      if (filled) next.add(3);
+      else next.delete(3);
+      return next;
+    });
+  }
+
+  function handlePaymentMethodChange(m: "po" | "card") {
+    setPaymentMethod(m);
+    setPoNumber("");
+    setCardNumber("");
+    setPoError(false);
+    setCardError(false);
+    updateStep3Completion(false);
+  }
+
+  function handlePoNumberChange(val: string) {
+    setPoNumber(val);
+    if (poError && val.trim()) setPoError(false);
+    updateStep3Completion(val.trim().length > 0);
+  }
+
+  function handleCardNumberChange(val: string) {
+    setCardNumber(val);
+    if (cardError && val.trim()) setCardError(false);
+    updateStep3Completion(val.trim().length > 0);
+  }
+
+  useEffect(() => {
+    if (pendingFocusField && openPanel === 3) {
+      const ref = pendingFocusField === "po" ? poInputRef : cardInputRef;
+      ref.current?.focus();
+      setPendingFocusField(null);
+    }
+  }, [pendingFocusField, openPanel]);
+
+  function getSubmitTooltipMessage(): TooltipMessage | null {
+    if (!completedPanels.has(1)) {
+      return { prefix: "Complete ", bold: "Shipping Address", suffix: " to place your order." };
+    }
+    if (!completedPanels.has(2)) {
+      return { prefix: "Complete ", bold: "Shipping Options", suffix: " to place your order." };
+    }
+    if (paymentMethod === "po") {
+      if (!poNumber.trim()) {
+        return { prefix: "Enter a ", bold: "Purchase Order number", suffix: " to place your order." };
+      }
+    } else if (!cardNumber.trim()) {
+      return { prefix: "Enter your ", bold: "card number", suffix: " to place your order." };
+    }
+    return null;
+  }
+
+  function handleSubmitClick() {
+    if (!completedPanels.has(1)) {
+      setOpenPanel(1);
+      return;
+    }
+    if (!completedPanels.has(2)) {
+      setOpenPanel(2);
+      return;
+    }
+    setOpenPanel(3);
+    if (paymentMethod === "po") {
+      if (!poNumber.trim()) {
+        setPoError(true);
+        setPendingFocusField("po");
+        return;
+      }
+    } else if (!cardNumber.trim()) {
+      setCardError(true);
+      setPendingFocusField("card");
+      return;
+    }
+  }
+
   return (
     <div className={s.page}>
       {modal === "change" && (
@@ -2703,21 +2851,25 @@ export default function CheckoutPage() {
             />
             {openPanel === 3 && (
               <Panel3Content
-                onComplete={() =>
-                  setCompletedPanels((prev) => new Set([...prev, 3]))
-                }
-                onDisable={() =>
-                  setCompletedPanels((prev) => {
-                    const sNew = new Set(prev);
-                    sNew.delete(3);
-                    return sNew;
-                  })
-                }
+                method={paymentMethod}
+                poNumber={poNumber}
+                cardNumber={cardNumber}
+                poError={poError}
+                cardError={cardError}
+                poInputRef={poInputRef}
+                cardInputRef={cardInputRef}
+                onMethodChange={handlePaymentMethodChange}
+                onPoNumberChange={handlePoNumberChange}
+                onCardNumberChange={handleCardNumberChange}
               />
             )}
           </div>
         </div>
-        <OrderSidebar orderEnabled={completedPanels.has(3)} />
+        <OrderSidebar
+          orderEnabled={completedPanels.has(3)}
+          tooltipMessage={getSubmitTooltipMessage()}
+          onSubmit={handleSubmitClick}
+        />
       </div>
       <div className={s.footer}>
         <div className={s.footerInner}>

@@ -2218,8 +2218,72 @@
 .submitBtnDisabled {
   background-color: #9ca3af;
   color: #ffffff;
-  cursor: not-allowed;
+  cursor: pointer;
   opacity: 0.7;
+}
+
+.submitBtnWrap {
+  position: relative;
+  width: 100%;
+}
+
+.submitTooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background-color: #1e293b;
+  color: #ffffff;
+  font-family: "Roboto:Regular", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  padding: 10px 14px;
+  border-radius: 8px;
+  width: max-content;
+  max-width: 240px;
+  text-align: left;
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.25);
+  z-index: 5;
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #1e293b;
+  }
+}
+
+.submitTooltipDot {
+  flex-shrink: 0;
+  margin-top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #fbbf24;
+  animation: submitTooltipPulse 1.6s ease-out infinite;
+}
+
+@keyframes submitTooltipPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.75);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(251, 191, 36, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+  }
 }
 
 .backToCartBtn {

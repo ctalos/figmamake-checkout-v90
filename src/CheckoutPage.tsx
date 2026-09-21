@@ -1566,8 +1566,7 @@ function Panel2Content({
                   <span className={s.badgeSaveMoney}>SAVE MONEY</span>
                 </div>
                 <p className={s.fulfillmentCardDesc}>
-                  Items are shipped together on the latest available date from
-                  multiple warehouses.
+                  Items ship once your full order is ready, based on the longest lead time item.
                 </p>
               </div>
               <div

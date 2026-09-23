@@ -9,7 +9,6 @@ import s from "./styles/checkout.module.scss";
 
 type ModalType = "change" | null;
 
-type TooltipMessage = { prefix: string; bold: string; suffix: string };
 
 const CARRIER_METHODS = [
   "ups-collect",
@@ -2484,7 +2483,7 @@ function OrderSidebar({
   onSubmit,
 }: {
   orderEnabled: boolean;
-  tooltipMessage: TooltipMessage | null;
+  tooltipMessage: string | null;
   onSubmit: () => void;
 }) {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -2556,12 +2555,7 @@ function OrderSidebar({
           >
             {showTooltip && tooltipMessage && (
               <div className={s.submitTooltip} role="tooltip">
-                <span className={s.submitTooltipDot} />
-                <span>
-                  {tooltipMessage.prefix}
-                  <strong>{tooltipMessage.bold}</strong>
-                  {tooltipMessage.suffix}
-                </span>
+                {tooltipMessage}
               </div>
             )}
             <button
@@ -2684,19 +2678,17 @@ export default function CheckoutPage() {
     }
   }, [pendingFocusField, openPanel]);
 
-  function getSubmitTooltipMessage(): TooltipMessage | null {
+  function getSubmitTooltipMessage(): string | null {
     if (!completedPanels.has(1)) {
-      return { prefix: "Complete ", bold: "Shipping Address", suffix: " to place your order." };
+      return "Confirm your shipping address";
     }
     if (!completedPanels.has(2)) {
-      return { prefix: "Complete ", bold: "Shipping Options", suffix: " to place your order." };
+      return "Select your shipping option";
     }
-    if (paymentMethod === "po") {
-      if (!poNumber.trim()) {
-        return { prefix: "Enter a ", bold: "Purchase Order number", suffix: " to place your order." };
-      }
-    } else if (!cardNumber.trim()) {
-      return { prefix: "Enter your ", bold: "card number", suffix: " to place your order." };
+    const paymentFilled =
+      paymentMethod === "po" ? poNumber.trim() : cardNumber.trim();
+    if (!paymentFilled) {
+      return "Complete your payment information";
     }
     return null;
   }

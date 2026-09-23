@@ -2683,7 +2683,7 @@ export default function CheckoutPage() {
       return "Confirm your shipping address";
     }
     if (!completedPanels.has(2)) {
-      return "Select your shipping option";
+      return "Select your shipping options";
     }
     const paymentFilled =
       paymentMethod === "po" ? poNumber.trim() : cardNumber.trim();

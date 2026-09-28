@@ -292,7 +292,7 @@ function ArrowIcon({
   direction,
   color = "currentColor",
 }: {
-  direction: "left" | "right";
+  direction: "left" | "right" | "up";
   color?: string;
 }) {
   return (
@@ -304,6 +304,14 @@ function ArrowIcon({
       {direction === "right" ? (
         <path
           d="M3 8h10M9 4l4 4-4 4"
+          stroke={color}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : direction === "up" ? (
+        <path
+          d="M8 13V3M4 7l4-4 4 4"
           stroke={color}
           strokeWidth="1.5"
           strokeLinecap="round"
@@ -1853,6 +1861,7 @@ function Panel2Content({
                 shipsOn: "09/02/2026",
               },
             ]}
+            showBackToTop
           />
         </>
       ) : (
@@ -1860,6 +1869,7 @@ function Panel2Content({
           packageLabel="All Items"
           shipsFrom=""
           shipsOn="Monday, September 2nd, 2026"
+          showBackToTop
           items={[
             {
               img: imgB6000ZZ,
@@ -1912,6 +1922,7 @@ function PackageTable({
   shipsFrom,
   shipsOn,
   items,
+  showBackToTop,
 }: {
   packageLabel: string;
   shipsFrom: string;
@@ -1929,6 +1940,7 @@ function PackageTable({
     location: string;
     shipsOn: string;
   }[];
+  showBackToTop?: boolean;
 }) {
   return (
     <div className={s.packageTableWrap}>
@@ -2019,6 +2031,21 @@ function PackageTable({
           </div>
         ))}
       </div>
+      {showBackToTop && (
+        <div className={s.backToTopRow}>
+          <button
+            onClick={() =>
+              document
+                .getElementById("step2Top")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" })
+            }
+            className={s.backToTopBtn}
+          >
+            <ArrowIcon direction="up" color="#333" />
+            Back to Top
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -2820,7 +2847,7 @@ export default function CheckoutPage() {
               />
             )}
           </div>
-          <div className={s.panel}>
+          <div className={s.panel} id="step2Top">
             <PanelHeader
               isOpen={openPanel === 2}
               isCompleted={completedPanels.has(2)}
